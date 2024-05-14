@@ -1,5 +1,3 @@
 #include "Message.h"
 
-json entity::Message::processMessage() {
-	
-}
+json Message::processMessage() {}

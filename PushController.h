@@ -1,13 +1,18 @@
 #ifndef PUSHCONTROLLER_H
 #define PUSHCONTROLLER_H
 
-class PushController : Controller {
-
-
+#include "Controller.h"
+class PushController : public Controller
+{
 public:
-	void pushMessage();
+    static PushController *getInstance();
+    ~PushController();
+    void pushMessage();
+    void pushAddFriendRequest(int userID, int friendID);
 
-	void pushAddFriendRequest();
+private:
+    static PushController *m_pushController;
+    PushController();
 };
 
 #endif

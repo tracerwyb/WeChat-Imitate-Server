@@ -1,25 +1,30 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-namespace FrameworkDesign {
-	class Server {
+#include "ControllerFactory.h"
+#include "threadpool.h"
 
-	private:
-		hreadPool m_threadPool;
-		FrameworkDesign::InitController* m_ic;
-		MessageController* m_mc;
-		PushController* m_pc;
-		FriendController* m_fc;
+class InitController;
+class MessageController;
+class PushController;
+class FriendController;
 
-	public:
-		void start();
+class Server
+{
+private:
+    ThreadPool m_threadPool;
+    InitController *m_ic;
+    MessageController *m_mc;
+    PushController *m_pc;
+    FriendController *m_fc;
+    ControllerFactory *m_controllerFactory;
 
-		void processClientRequest(int& fd);
-
-		bool receive();
-
-		void send();
-	};
-}
+public:
+    Server();
+    void start();
+    void processClientRequest(int &fd);
+    bool receive();
+    void send();
+};
 
 #endif

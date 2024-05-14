@@ -1,9 +1,5 @@
 #include "MessageProxy.h"
 
-json FrameworkDesign::MessageProxy::sendMessage() {
-	
-}
+json MessageProxy::sendMessage() {}
 
-void FrameworkDesign::MessageProxy::deleteMsg() {
-	
-}
+void MessageProxy::deleteMsg() {}

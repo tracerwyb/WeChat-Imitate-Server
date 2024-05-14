@@ -1,13 +1,20 @@
 #ifndef MESSAGECONTROLLER_H
 #define MESSAGECONTROLLER_H
 
-class MessageController : Controller {
+#include "Controller.h"
 
-
+class MessageController : public Controller
+{
 public:
-	void storeMessageInfo();
+    static MessageController *getInstance();
+    ~MessageController();
 
+    void storeMessageInfo();
 	void pushMessage();
+
+private:
+    static MessageController *m_msgController;
+    MessageController();
 };
 
 #endif

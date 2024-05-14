@@ -1,17 +1,9 @@
 #include "MessageBroker.h"
 
-static MessageBroker* FrameworkDesign::MessageBroker::getInstance() {
-	
-}
+MessageBroker *MessageBroker::getInstance() {}
 
-bool FrameworkDesign::MessageBroker::addNewMessage() {
-	
-}
+bool MessageBroker::addNewMessage() {}
 
-bool FrameworkDesign::MessageBroker::delMsgForUser() {
-	
-}
+bool MessageBroker::delMsgForUser() {}
 
-bool FrameworkDesign::MessageBroker::deleteMessage() {
-	
-}
+bool MessageBroker::deleteMessage() {}

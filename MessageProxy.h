@@ -1,16 +1,18 @@
 #ifndef MESSAGEPROXY_H
 #define MESSAGEPROXY_H
 
-namespace FrameworkDesign {
-	class MessageProxy : FrameworkDesign::MessageInterface {
+#include "Message.h"
+#include "MessageInterface.h"
+#include <vector>
 
-	public:
-		vector<entity::Message> m_msgSequence;
+class MessageProxy : MessageInterface
+{
+public:
+    std::vector<Message> m_msgSequence;
 
-		json sendMessage();
+    json sendMessage();
 
-		void deleteMsg();
-	};
-}
+    void deleteMsg();
+};
 
 #endif

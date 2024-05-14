@@ -1,31 +1,31 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-namespace FrameworkDesign {
-	class netWork {
+#include <string>
 
-	private:
-		int m_listenFd;
+class Network
+{
+private:
+    int m_listenFd;
 
-	public:
-		int createSocket();
+public:
+    int createSocket();
 
-		int bindSocket();
+    int bindSocket();
 
-		int listenSocket();
+    int listenSocket();
 
-		int acceptSocket();
+    int acceptSocket();
 
-		void closeSocket();
+    void closeSocket();
 
-		int pollSocket();
+    int pollSocket();
 
-		void sendMessage(char* buf, size_t size);
+    void sendMessage(int conn, char *buf);
 
-		void receiveMessage(char* buffer);
+    void receiveMessage(char *buffer);
 
-		int sendFile(string path);
-	};
-}
+    int sendFile(std::string path);
+};
 
 #endif

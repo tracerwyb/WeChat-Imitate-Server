@@ -1,9 +1,17 @@
 #ifndef INITCONTROLLER_H
 #define INITCONTROLLER_H
 
-namespace FrameworkDesign {
-	class InitController : Controller {
-	};
-}
+#include "Controller.h"
+
+class InitController : public Controller
+{
+public:
+    static InitController *getInstance();
+    ~InitController();
+
+private:
+    static InitController *m_initController;
+    InitController();
+};
 
 #endif

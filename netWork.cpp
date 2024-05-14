@@ -1,37 +1,19 @@
 #include "netWork.h"
 
-int FrameworkDesign::netWork::createSocket() {
-	
-}
+int Network::createSocket() {}
 
-int FrameworkDesign::netWork::bindSocket() {
-	
-}
+int Network::bindSocket() {}
 
-int FrameworkDesign::netWork::listenSocket() {
-	
-}
+int Network::listenSocket() {}
 
-int FrameworkDesign::netWork::acceptSocket() {
-	
-}
+int Network::acceptSocket() {}
 
-void FrameworkDesign::netWork::closeSocket() {
-	
-}
+void Network::closeSocket() {}
 
-int FrameworkDesign::netWork::pollSocket() {
-	
-}
+int Network::pollSocket() {}
 
-void FrameworkDesign::netWork::sendMessage(char* buf, size_t size) {
-	
-}
+void Network::sendMessage(int conn, char *buf) {}
 
-void FrameworkDesign::netWork::receiveMessage(char* buffer) {
-	
-}
+void Network::receiveMessage(char *buffer) {}
 
-int FrameworkDesign::netWork::sendFile(string path) {
-	
-}
+int Network::sendFile(std::string path) {}

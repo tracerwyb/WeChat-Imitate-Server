@@ -1,20 +1,20 @@
 #ifndef MESSAGEBROKER_H
 #define MESSAGEBROKER_H
 
-namespace FrameworkDesign {
-	class MessageBroker : FrameworkDesign::RelationalBroker {
+#include "RelationalBroker.h"
 
-	public:
-		static MessageBroker* m_msgBroker;
+class MessageBroker : RelationalBroker
+{
+public:
+    static MessageBroker *m_msgBroker;
 
-		static MessageBroker* getInstance();
+    static MessageBroker *getInstance();
 
-		bool addNewMessage();
+    bool addNewMessage();
 
-		bool delMsgForUser();
+    bool delMsgForUser();
 
-		bool deleteMessage();
-	};
-}
+    bool deleteMessage();
+};
 
 #endif
