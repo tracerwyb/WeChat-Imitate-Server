@@ -9,7 +9,6 @@ LINK_DIRECTORIES("/usr/lib/")  #add lib directories
 LINK_LIBRARIES(libmysqlpp.so.3.3.0)  #add lib
 
 add_executable(appWechat-Server
-
 )
 
 target_sources( appWechat-Server PRIVATE

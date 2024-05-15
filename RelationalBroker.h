@@ -10,6 +10,7 @@ public:
 
     mysqlpp::StoreQueryResult query(std::string command);
     void update(std::string command);
+    bool buildConnect();
 
 private:
     static std::unique_ptr<mysqlpp::Connection> m_connection;

@@ -7,7 +7,7 @@ class PushController : public Controller
 public:
     static PushController *getInstance();
     ~PushController();
-    void pushMessage();
+    void pushMessage(json msg, int conn);
     void pushAddFriendRequest(int userID, int friendID);
 
 private:

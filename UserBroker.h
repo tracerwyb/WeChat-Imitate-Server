@@ -2,6 +2,9 @@
 #define USERBROKER_H
 
 #include "RelationalBroker.h"
+#include "nlohmann/json.hpp"
+
+using nlohmann::json;
 
 #define USER_ID unsigned int
 #define USER_CONN int
@@ -14,7 +17,7 @@ public:
 
 	static UserBroker* getInstance();
 
-    User *findUser(int user_id);
+    json findUser(int user_id);
 
     bool storeFriendRequest(USER_ID request_sender_id, USER_ID request_recver_id);
 
@@ -27,6 +30,8 @@ public:
     bool logOffUser();
 
     bool modifyUserInfo();
+
+    json storeQueryResultToJson(const mysqlpp::StoreQueryResult &user);
 };
 
 #endif

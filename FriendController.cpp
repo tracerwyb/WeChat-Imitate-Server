@@ -20,14 +20,14 @@ FriendController *FriendController::getInstance()
     return m_friendController;
 }
 
-UserInterface *FriendController::findFriendById(int friend_id)
+json FriendController::findFriendById(int friend_id)
 {
     return userproxy->findFriendByID(friend_id);
 }
 
-void FriendController::storeAddFriendInfo(USER_ID user_id, USER_CONN user_conn)
+void FriendController::storeAddFriendInfo(int user_id, int friend_id)
 {
-    if (!UserBroker::getInstance()->storeFriendRequest(user_id, user_conn))
+    if (!UserBroker::getInstance()->storeFriendRequest(user_id, friend_id))
         std::cerr << "store friend request failed!";
 }
 

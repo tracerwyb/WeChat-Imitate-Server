@@ -13,4 +13,17 @@ void UserProxy::logOff() {
 	
 }
 
-User *UserProxy::findFriendByID(int friend_id) {}
+nlohmann::json UserProxy::findFriendByID(int friend_id)
+{
+    return ((new User(friend_id))->getInfoFromDB());
+}
+
+json UserProxy::toJson(User *user)
+{
+    return user->toJson();
+}
+
+int UserProxy::findUserConn(int user_id)
+{
+    return User::findUserConn(user_id);
+}

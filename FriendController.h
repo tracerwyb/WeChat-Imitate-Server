@@ -10,9 +10,9 @@ public:
     static FriendController *getInstance();
     ~FriendController();
 
-    UserInterface *findFriendById(int friend_id);
-    void storeAddFriendInfo(USER_ID user_id, USER_CONN user_conn);
-    void pushAddFriendRequest(int userConn, int friendConn);
+    json findFriendById(int friend_id);
+    void storeAddFriendInfo(int user_id, int friend_id);
+    void pushAddFriendRequest(int user_id, int friend_id);
     void updateFriendList(int user_id, int friend_id, int state);
 
 private:

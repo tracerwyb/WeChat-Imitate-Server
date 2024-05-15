@@ -9,11 +9,28 @@ User::User(int user_id)
     : m_user_id(user_id)
 {}
 
-User *User::getInfoFromDB() {}
+json User::getInfoFromDB()
+{
+    return UserBroker::getInstance()->findUser(m_user_id);
+}
 
 int User::findUserConn(int user_id)
 {
     return m_users[user_id];
+}
+
+json User::toJson()
+{
+    json user;
+
+    user["UserID"] = m_user_id;
+    // user["U_Nickname"] = m_nickname;
+    // user["U_Avater"] = avatar_path;
+    // user["U_Gender"] = m_gender;
+    // user["U_Area"] = m_area;
+    // user["U_Signature"] = m_singnature;
+
+    return user;
 }
 
 bool User::initializeMUsers()
@@ -36,8 +53,8 @@ void User::updateFriendList(int friend_id, int state)
     if (state == 1) {
         m_friendList.push_back(friend_id);
         UserBroker::getInstance()->addFriendRelation(m_user_id, friend_id);
-        UserBroker::getInstance()->modifyFriendRequest(m_user_id, friend_id, state);
     } else if (state == -1) {
+        UserBroker::getInstance()->deleteFriendRelation(m_user_id, friend_id);
         auto iter = m_friendList.begin();
         while (iter != m_friendList.end()) {
             if (*iter == friend_id)
