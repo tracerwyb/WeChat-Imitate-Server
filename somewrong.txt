@@ -1,0 +1,49 @@
+1.把指针返回时，接收的指针无法接收到返回的指针
+    是因为返回的指针本质是地址，在返回时函数执行完销毁，变成了野指针
+    solve：将返回指针定义为静态变量或是传入接收指针的地址，直接在函数体里面给它赋值
+2.服务端已连接套接字读缓冲区无数据，select函数仍然认为可读
+    是因为客户端传数据时，write（m_listen,buf,size)size定义了一个很大的值10240,虽然buf只有像“abcdsldh”几个字符但是写入了一个很大的数据，导致服务端没有读完，有一种读完了的假象。
+3.在写reciveTextMessage函数时，由于之前是直接设置了一个很大的缓冲区直接读，后来想实现分批次通过while循环多次读取，写了这样的代码导致一直在while循环里出不来
+{
+int n=0;
+int posx=0;
+while(n=read(m_listenfd,recivemessage+posx,5)>0){
+        posx+=n;
+    }
+    qDebug()<<"mesg:"<<recivemessage;
+}
+    后来才想到不是一直循环而是在循环中等待说明是阻塞了，是因为read函数读不到数据一直在等待（因为之前想的是read读到文件结束符尾是会返回0的，结果这个应该算不得文件描述符，读不到会一直等待，而不是返回0,所以循环不会结束QAQ这么简单，想了好久我哭死）
+4.从套接字中读数据时若第二次读到的数据比第一次读到的长度小，发现打印出来的是第二次会覆盖第一次的内容，覆盖不到的地方会显示第一次的输出
+    是因为read读的时候buf传的是类私有成员变量的指针，每次读不是重新给指针赋值，而是修改指针内容，没覆盖到的地方依然保存在buf中，应该在每次写之前先进行清空操作
+5.套接字中老是有一些奇怪的字符，与缓冲区大小设置和每次传递的数据大小有关。我全部设置成1024统一过后就没有奇怪的字符了，感觉这个问题没找到关键，以后好好研究一下。
+6.当函数参数传入指针如char* buf,或数组char buf「」时，我read或write函数最后一个参数是这样写的strlen（buf）或则sizeof（buf），同上面一个问题，导致套接字传输数据很奇怪
+    一部分原因是我以为这样算出来的是缓冲区的大小或这缓冲区数据长度，但是不是！！！这样算出来sizeof（buf）的是指针的大小8byte，strlen（buf）是0。
+7.当我写将数据循环写入套接字的函数时，遇到了如果写入数据的长度不是write最后一个参数的整数倍，就会循环很多次，写入了一些奇怪的系统数据，代码如下
+void Network::sendTextMessage(char* sendmessage,int size)
+{
+    /*if(write(m_listenfd,sendmessage,1024) < 0)
+        qDebug()<<"write erro!";
+    else
+        qDebug()<<"client buf.len"<<sizeof(sendmessage);
+        qDebug()<<"write succeed!";
+    */
+    int offset=0;
+    int n=0;
+    int i=1;
+    while(size){
+        n=write(m_listenfd,sendmessage+offset,5);
+        if(n<0){
+            qDebug()<<"write erro!";
+            break;
+        }
+        qDebug()<<"write succeed!"<<i;
+        i++;
+        offset+=n;
+        size=size-n;
+        qDebug()<<"size!"<<size;
+        qDebug()<<"offset!"<<offset;
+    }
+}
+    原因是while的循环条件，应该改为size>0,因为最后一次会让size为负数，不会为0,然后buf+offset就会访问到系统的其他数据
+上面写完后我又发现既然已经知道输入数据的大小，那为什么不直接每次写如输入数据的大小呢，这样就不用while循环了
+结合网上的资料发现还是有必要用while循环的，不过还是先把每次写入的数据改为输入数据的大小，其他的不变，这样是为了防止写入数据时，如果一次每写完可以再次写入，因为如果缓冲区快满了，不写while循环就可能导致数据只传输了一部分。
