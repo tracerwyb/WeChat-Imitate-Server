@@ -5,6 +5,7 @@
 #include "sys/socket.h"
 #include "netinet/in.h"
 #include "string.h"
+#include <sys/ioctl.h>
 //#include <sys/ioctl.h>
 
 #define BUF_SIZE  1024
@@ -17,7 +18,7 @@ void Network::createSocket()
     bzero(&servaddr,sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = htonl((u_int32_t)0x00000000);
-    servaddr.sin_port = htons(9878);    //9878
+    servaddr.sin_port = htons(9879);    //9879
     if(bind(m_listenfd,(struct sockaddr *)&servaddr,sizeof(servaddr)) < 0)
         qDebug()<<"bind socket erro!";
     else {
@@ -46,25 +47,38 @@ int Network::acceptSocket()
     return cnnfd;
 }
 
-void Network::recieveMessage(int cnnfd,char* buf,int size)
+void Network::recieveMessage(int cnnfd,char* buf)
 {
+    int nbytes;
+    if(ioctl(cnnfd,FIONREAD,&nbytes) == -1){
+        qDebug()<<"erro iotrl";
+    }else{
+        if(nbytes>0){
+            qDebug()<<"buffer have data:"<<nbytes;
+        }
+        else {
+            qDebug()<<"receive socket no data";
+        }
+    }
     int n{0};
     int offset{0};
     memset(buf,'\0',BUF_SIZE);
-    while ((size-n)>0) {
-        n=read(cnnfd,buf+offset,size);
+    while ((nbytes-n)>0) {
+        n=read(cnnfd,buf+offset,nbytes);
         offset=offset+n;
         if(n<0)
             qDebug()<<"faild to read message from connect socket!";
         else {
-            qDebug()<<"n:"<<strlen(buf);
+            qDebug()<<"n:"<<n;
             qDebug()<<"succeed to reade msg from cnnfd :"<<buf;
         }
     }
 }
 
-void Network::sendMessage(int cnnfd,char* buf,int size)
+void Network::sendMessage(int cnnfd,char* buf)
 {
+    int size=strlen(buf);
+    qDebug()<<"network.cpp sndmsg buf.len:"<<size;
     int n=0;
     int offset=0;
     while ((size-n)>0) {

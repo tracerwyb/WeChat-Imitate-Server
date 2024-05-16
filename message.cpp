@@ -6,11 +6,10 @@ Message::Message()
 
 void Message::SendMessage(int receive)
 {
-    int n=strlen(m_msg);
-    network.sendMessage(receive,m_msg,n);
+    network.sendMessage(receive,m_msg);
 }
 
-void Message::RecieveMessage(int send,int size)
+void Message::RecieveMessage(int send)
 {
-    network.recieveMessage(send,m_msg,size);
+    network.recieveMessage(send,m_msg);
 }

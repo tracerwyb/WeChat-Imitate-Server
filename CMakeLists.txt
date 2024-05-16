@@ -1,62 +1,25 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.26)
 
-project(Wechat-Server VERSION 0.1 LANGUAGES CXX)
+project(server-network VERSION 0.1 LANGUAGES CXX)
 
-
-include_directories("/usr/include/mysql/")  #add include directories
-
-LINK_DIRECTORIES("/usr/lib/")  #add lib directories
-LINK_LIBRARIES(libmysqlpp.so.3.3.0)  #add lib
-
-add_executable(appWechat-Server
-)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 qt_standard_project_setup()
 
-target_sources( appWechat-Server PRIVATE
-    PRIVATE
+qt_add_executable(server-network
     main.cpp
-    User.cpp        User.h
-    UserBroker.cpp  UserBroker.h
-    UserInterface.h
-    UserProxy.cpp   UserProxy.h
-
-    Controller.h
-    ControllerFactory.cpp    ControllerFactory.h
-    FriendController.cpp    FriendController.h
-    MessageController.cpp   MessageController.h
-    PushController.cpp      PushController.h
-    InitController.h        InitController.cpp
-
-    message.cpp         message.h
-    MessageBroker.cpp   MessageBroker.h
-    MessageInterface.h
-    MessageProxy.cpp    MessageProxy.h
-
-    RelationalBroker.h  RelationalBroker.cpp
-
-    Server.cpp          Server.h
-    network.cpp         network.h
-    threadpool.cpp        threadpool.h
-
+    network.h network.cpp
+    message.h message.cpp
 )
 
-target_compile_features( appWechat-Server PRIVATE cxx_std_20 )
+target_compile_features(server-network PRIVATE cxx_std_20)
 
-add_subdirectory(json)
-
-#链接库
-target_link_libraries(appWechat-Server
-    PRIVATE
-    mariadbcpp
-    pthread
-    nlohmann_json
-    Qt6::Widgets
+target_link_libraries(server-network
+    PRIVATE 
+        Qt6::Widgets
 )
 
-#######
-set_target_properties(appWechat-Server PROPERTIES
+set_target_properties(server-network PROPERTIES
     AUTORCC TRUE
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
@@ -64,13 +27,20 @@ set_target_properties(appWechat-Server PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
 include(GNUInstallDirs)
-install(TARGETS appWechat-Server
+install(TARGETS server-network
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-qt_finalize_executable(appWechat-Server)
+
+qt_finalize_executable(server-network)
+
+# Define target properties for Android with Qt 6 as:
+#    set_property(TARGET server-network APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
 
 
@@ -264,4 +234,3 @@ qt_finalize_executable(appWechat-Server)
 # if(QT_VERSION_MAJOR EQUAL 6)
 #     qt_finalize_executable(server-network)
 # endif()
->>>>>>> origin/sendmsg-network
