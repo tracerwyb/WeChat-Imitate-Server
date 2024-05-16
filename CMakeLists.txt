@@ -17,26 +17,26 @@ qt_standard_project_setup()
 target_sources( appWechat-Server PRIVATE
     PRIVATE
     main.cpp
-    User.cpp        User.h
-    UserBroker.cpp  UserBroker.h
-    UserInterface.h
-    UserProxy.cpp   UserProxy.h
+    user.cpp        user.h
+    userbroker.cpp  userbroker.h
+    userinterface.h
+    userproxy.cpp   userproxy.h
 
-    Controller.h
-    ControllerFactory.cpp    ControllerFactory.h
-    FriendController.cpp    FriendController.h
-    MessageController.cpp   MessageController.h
-    PushController.cpp      PushController.h
-    InitController.h        InitController.cpp
+    controller.h
+    controllerfactory.cpp    controllerfactory.h
+    friendcontroller.cpp    friendcontroller.h
+    messagecontroller.cpp   messagecontroller.h
+    pushcontroller.cpp      pushcontroller.h
+    initcontroller.h        initcontroller.cpp
 
     message.cpp         message.h
-    MessageBroker.cpp   MessageBroker.h
-    MessageInterface.h
-    MessageProxy.cpp    MessageProxy.h
+    messagebroker.cpp   messagebroker.h
+    messageinterface.h
+    messageproxy.cpp    messageproxy.h
 
-    RelationalBroker.h  RelationalBroker.cpp
+    relationalbroker.h  relationalbroker.cpp
 
-    Server.cpp          Server.h
+    server.cpp          server.h
     network.cpp         network.h
     threadpool.cpp        threadpool.h
 
@@ -264,4 +264,3 @@ qt_finalize_executable(appWechat-Server)
 # if(QT_VERSION_MAJOR EQUAL 6)
 #     qt_finalize_executable(server-network)
 # endif()
->>>>>>> origin/sendmsg-network
