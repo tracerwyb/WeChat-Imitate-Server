@@ -1,17 +1,32 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
+#include "messageinterface.h"
+#include <nlohmann/json.hpp>
+#include <string>
 
-#include "network.h"
-#define BUF_SIZE 1024
-class Message
+using namespace std;
+
+class MessageInterface;
+
+class Message : MessageInterface
 {
+private:
+    unsigned int receiverid;
+    unsigned int senderid;
+    std::string type;
+    std::string content;
+    time_t dateTime;
+
 public:
     Message();
-    void SendMessage(int receive);
-    void RecieveMessage(int send,int size);
-private:
-    Network network;
-    char m_msg[BUF_SIZE];
+    Message(unsigned int _receiverid,
+            unsigned int _senderid,
+            std::string _content,
+            time_t _dateTime,
+            std::string _type);
+    nlohmann::json getAbstract();
+    std::vector<unsigned char> getByteAbstract();
+    std::string handleByteStreamContent(std::vector<unsigned char> byte_Stream, std::string type);
 };
 
-#endif // MESSAGE_H
+#endif

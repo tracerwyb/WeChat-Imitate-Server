@@ -1,15 +1,8 @@
-#include "RelationalBroker.h"
+#include "relationalbroker.h"
 #include <iostream>
-#include <mysql/mysql.h>
-
 std::unique_ptr<mysqlpp::Connection> RelationalBroker::m_connection = NULL;
 
 RelationalBroker::RelationalBroker()
-{
-    buildConnect();
-}
-
-bool RelationalBroker::buildConnect()
 {
     //init connection
     std::unique_ptr<mysqlpp::Connection> conn = std::make_unique<mysqlpp::Connection>(false);
@@ -18,8 +11,6 @@ bool RelationalBroker::buildConnect()
     else
         std::cout << "Connect Unsucessfully" << std::endl;
     m_connection = std::move(conn);
-
-    return false;
 }
 
 void RelationalBroker::initDataBase()
@@ -41,7 +32,9 @@ void RelationalBroker::initDataBase()
 
         this->query(
             "CREATE TABLE Message(MessageID INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, SendTime "
-            "DATETIME,SenderId INT UNSIGNED,ReceiverId INT UNSIGNED,MessageContent VARCHAR(250));");
+            "DATETIME,SenderId INT UNSIGNED,ReceiverId INT UNSIGNED,MessageContent "
+            "VARCHAR(250),MessageType "
+            "VARCHAR(10));");
 
         this->query("INSERT INTO Users "
                     "(UserID, U_Nickname, U_Avater, U_Gender, U_Area, U_Signature)VALUES"
@@ -59,12 +52,13 @@ void RelationalBroker::initDataBase()
                     "20209834, 20419934, '2024-04-26 17:20:00'), (2, 20419934, 20419934, "
                     "'2024-04-26 17:20:00'), (3, 20726334, 20419934, '2024-04-26 17:20:00');");
 
-        this->query("INSERT INTO Message (MessageID, SendTime, SenderId,ReceiverId, "
-                    "MessageContent)VALUES(1, '2024-04-26 17:20:00', "
-                    "'20419934', '20419934','hello, this is kangkang'),(2, '2024-04-26 17:23:00', "
-                    "'20726334','20419934', "
-                    "'hello world'),"
-                    "(3, '2024-04-26 17:24:00', '20209834','20419934', 'hello qt');");
+        this->query(
+            "INSERT INTO Message (MessageID, SendTime, SenderId,ReceiverId, "
+            "MessageContent,MessageType)VALUES(1, '2024-04-26 17:20:00', "
+            "'20419934', '20419934','hello, this is kangkang','Text'),(2, '2024-04-26 17:23:00', "
+            "'20726334','20419934', "
+            "'hello world','Text'),"
+            "(3, '2024-04-26 17:24:00', '20209834','20419934', 'hello qt','Text');");
 
     } catch (mysqlpp::Exception e) {
         std::cout << e.what();
@@ -100,7 +94,6 @@ void RelationalBroker::update(std::string command)
 {
     try {
         mysqlpp::Query query = m_connection->query();
-        std::cout << command << std::endl;
         query << command;
         query.store();
     } catch (std::exception e) {

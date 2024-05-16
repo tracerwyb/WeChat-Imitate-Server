@@ -1,37 +1,29 @@
 #ifndef USERBROKER_H
 #define USERBROKER_H
+#include "relationalbroker.h"
 
-#include "RelationalBroker.h"
-#include "nlohmann/json.hpp"
+class RationBroker;
 
-using nlohmann::json;
-
-#define USER_ID unsigned int
-#define USER_CONN int
-class User;
-
-class UserBroker : public RelationalBroker
+class UserBroker : RelationalBroker
 {
 public:
 	static UserBroker* m_userBroker;
 
 	static UserBroker* getInstance();
 
-    json findUser(int user_id);
+	void findFriend();
 
-    bool storeFriendRequest(USER_ID request_sender_id, USER_ID request_recver_id);
+	bool storeFriendRequest();
 
-    int modifyFriendRequest(USER_ID user_id, USER_ID friend_id, int state);
+	int modifyFriendRequest();
 
-    bool addFriendRelation(USER_ID user_id, USER_ID friend_id);
+	bool addFriendRelation();
 
-    bool deleteFriendRelation(USER_ID user_id, USER_ID friend_id);
+	bool deleteFriendRelation();
 
-    bool logOffUser();
+	bool logOffUser();
 
-    bool modifyUserInfo();
-
-    json storeQueryResultToJson(const mysqlpp::StoreQueryResult &user);
+	bool modifyUserInfo();
 };
 
 #endif

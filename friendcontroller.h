@@ -1,24 +1,20 @@
 #ifndef FRIENDCONTROLLER_H
 #define FRIENDCONTROLLER_H
-
 #include "controller.h"
-#include "User.h"
-#include "UserInterface.h"
-class FriendController : public Controller
-{
+
+class FriendController : Controller {
+
+
 public:
-    static FriendController *getInstance();
-    ~FriendController();
+	void findFriendById();
 
-    json findFriendById(int friend_id);
-    void storeAddFriendInfo(int user_id, int friend_id);
-    void pushAddFriendRequest(int user_id, int friend_id);
-    void updateFriendList(int user_id, int friend_id, int state);
+	void storeAddFriendInfo();
 
-private:
-    static FriendController *m_friendController;
-    UserInterface *userproxy;
-    FriendController();
+	void pushAddFriendRequest();
+
+	void updateFriendList();
+
+	void newFriend();
 };
 
 #endif

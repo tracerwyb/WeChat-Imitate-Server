@@ -1,18 +1,13 @@
 #ifndef PUSHCONTROLLER_H
 #define PUSHCONTROLLER_H
-
 #include "controller.h"
-class PushController : public Controller
-{
-public:
-    static PushController *getInstance();
-    ~PushController();
-    void pushMessage(json msg, int conn);
-    void pushAddFriendRequest(int userID, int friendID);
+#include "message.h"
 
-private:
-    static PushController *m_pushController;
-    PushController();
+class PushController : Controller {
+public:
+    std::vector<unsigned char> pushMessage(nlohmann::json msg_json);
+
+    void pushAddFriendRequest();
 };
 
 #endif

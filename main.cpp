@@ -1,4 +1,5 @@
-#include "RelationalBroker.h"
+#include "pushcontroller.h"
+#include "relationalbroker.h"
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -6,27 +7,22 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "Server.h"
+#include <opencv4/opencv2/imgcodecs.hpp>
+#include <opencv4/opencv2/opencv.hpp>
 
-int main()
-{
-    RelationalBroker r;
-    r.initDataBase();
-    // r.query("select * from Message_UserID;");
-    // r.query("select * from FriendRequest;");
-    // r.query("select * from Relation;");
-    // r.query("select * from Users;");
-
-    // 获取当前工作目录s
+#include "messagecontroller.h"
+#include <ctime>
+/*
+void  init(){
     std::filesystem::path current_path = std::filesystem::current_path();
     std::cout << current_path;
-
+    
     std::string u{static_cast<std::string>(current_path) + "/UsersData"};
     char u_char[u.length() + 1];
     strcpy(u_char, u.c_str());
-
+    
     mkdir(u_char, S_IRWXU | S_IRWXG | S_IRWXO);
-
+    
     std::string data_name[3] = {"/Picture", "/Audio", "/Vedio"};
     for (int i = 0; i < 3; i++) {
         std::string p = {u + data_name[i]};
@@ -42,58 +38,48 @@ int main()
             std::cerr << e.what();
         }
     }
-
-    Server server;
+}
+*/
+/*
+bool test1_store(){
+    cv::Mat src = imread("/root/项目/WeChat-Imitate-Server/resources/1.png", cv::IMREAD_COLOR);
+    if (src.empty()) {
+        std::cout << "Load img failed!" << std::endl;
+        return 0;
+    } else {
+        std::cout << "Load img success!" << std::endl;
+    }
+    std::vector<unsigned char> buffer;
+    cv::imencode(".png", src, buffer);
+    //二进制输出
+    //std::cout.write(reinterpret_cast<const char *>(buffer.data()), buffer.size());
+    //bool success = cv::imwrite("/root/项目/WeChat-Imitate-Server/resources/output.png", src);
+    //imshow("src", src);
+    MessageController msgc;
+    time_t datetime;
+    time(&datetime);
+    msgc.storeMessageInfo(123456, 654321, buffer, datetime,type);
+}
+*/
+int main()
+{
+    RelationalBroker r;
+    r.initDataBase();
+    r.query("select * from FriendRequest ;");
+    r.query("select * from Message;");
+    r.query("select * from Relation;");
+    r.query("select * from Users;");
+    MessageController msgc;
+    std::vector<nlohmann::json> msgs = msgc.pushMessage(123456);
+    int size = msgs.size();
+    PushController pc;
+    for (int i = 0; i < size; i++) {
+        //发送msgs[i]json文件
+        std::vector<unsigned char> buffer = pc.pushMessage(msgs[i]);
+        if (buffer.size() != 0)
+            //发送字节流而
+            int i = 0;
+    }
 
     return 0;
-/*
-#include "network.h"
-#include "message.h"
-#include <sys/ioctl.h>
-#include <QDebug>
-int main(int argc, char *argv[])
-{
-    Network network;
-    network.createSocket();//
-
-    int cnnfd=network.acceptSocket();
-    int cnnfd2=network.acceptSocket();
-
-    Message msg1;
-    Message msg2;
-
-    while(1){
-        if(int result=network.Select(cnnfd)){
-            qDebug()<<"zheshijieguo  cnnfd:"<<result;
-            int nbytes;
-            if(ioctl(cnnfd,FIONREAD,&nbytes) == -1){
-                qDebug()<<"erro iotrl";
-            }else{
-                if(nbytes>0){
-                    qDebug()<<"buffer have data:"<<nbytes;
-                }
-                else {
-                    qDebug()<<"no data";
-                }
-            }
-            msg1.RecieveMessage(cnnfd,nbytes);
-            msg1.SendMessage(cnnfd2);
-        }
-        if(int re=network.Select(cnnfd2)){
-            qDebug()<<"zheshijieguo  cnnfd2:"<<re;
-            int nbytes;
-            if(ioctl(cnnfd,FIONREAD,&nbytes) == -1){
-                qDebug()<<"erro iotrl";
-            }else{
-                if(nbytes>0){
-                    qDebug()<<"buffer have data:"<<nbytes;
-                }
-                else {
-                    qDebug()<<"no data";
-                }
-            }
-            msg2.RecieveMessage(cnnfd2,nbytes);
-            msg2.SendMessage(cnnfd);
-        }
-    }*/
 }
