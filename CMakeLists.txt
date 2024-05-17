@@ -10,7 +10,6 @@ qt_add_executable(server-network
     main.cpp
     network.h network.cpp
     message.h message.cpp
-    server.h server.cpp
 )
 
 target_compile_features(server-network PRIVATE cxx_std_20)
