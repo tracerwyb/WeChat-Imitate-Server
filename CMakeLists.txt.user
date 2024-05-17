@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 13.0.0, 2024-05-17T19:23:04. -->
+<!-- Written by QtCreator 13.0.0, 2024-05-17T20:34:00. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -181,9 +181,10 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">server-network</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.CMakeRunConfiguration.server-network</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">server-network</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="bool" key="RunConfiguration.UseTerminal">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">/root/imitat wechat imformation/WeChat/Server/WeChat-Imitate-Server/build/Desktop_Qt_6_5_1_GCC_64bit-Debug</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
