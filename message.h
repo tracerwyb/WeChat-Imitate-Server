@@ -7,8 +7,6 @@ class Message
 {
 public:
     Message();
-    void SendMessage(int receive);
-    void RecieveMessage(int send);
 private:
     Network network;
     char m_msg[BUF_SIZE];

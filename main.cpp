@@ -11,24 +11,18 @@ int main(int argc, char *argv[])
     int cnnfd=network.acceptSocket();
     int cnnfd2=network.acceptSocket();
 
-    Message msg1;
-    Message msg2;
-
+    char buf[1024]="";
     while(1){
         if(int result=network.Select(cnnfd)){
             qDebug()<<"zheshijieguo  cnnfd:"<<result;
-            msg1.RecieveMessage(cnnfd);
-            msg1.SendMessage(cnnfd2);
+            network.recieveMessage(cnnfd,buf);
+            network.sendMessage(cnnfd2,buf);
         }
         if(int re=network.Select(cnnfd2)){
             qDebug()<<"zheshijieguo  cnnfd2:"<<re;
-            msg2.RecieveMessage(cnnfd2);
-            msg2.SendMessage(cnnfd);
+            network.recieveMessage(cnnfd2,buf);
+            network.sendMessage(cnnfd,buf);
         }
     }
 
-    /*QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    return a.exec();*/
 }
