@@ -1,7 +1,7 @@
 #ifndef USER_H
 #define USER_H
 
-#include "UserInterface.h"
+#include "userinterface.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -28,6 +28,7 @@ public:
     User(int user_id);
     json getInfoFromDB();
     json toJson();
+    void initFriendList();
     void updateFriendList(int friend_id, int state); // state: type of operation to friend
     static int findUserConn(int user_id);
     static bool initializeMUsers(); // initialize m_users

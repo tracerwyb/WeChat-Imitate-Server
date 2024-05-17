@@ -1,7 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "ControllerFactory.h"
+#include "controllerfactory.h"
 #include "threadpool.h"
 
 class InitController;

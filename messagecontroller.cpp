@@ -1,4 +1,4 @@
-#include "MessageController.h"
+#include "messagecontroller.h"
 
 MessageController *MessageController::m_msgController;
 

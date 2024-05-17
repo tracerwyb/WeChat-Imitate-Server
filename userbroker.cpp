@@ -1,5 +1,5 @@
-#include "UserBroker.h"
-#include "RelationalBroker.h"
+#include "userbroker.h"
+#include "relationalbroker.h"
 #include <time.h>
 
 UserBroker *UserBroker::m_userBroker = nullptr;
@@ -11,12 +11,19 @@ UserBroker *UserBroker::getInstance()
     return m_userBroker;
 }
 
-json UserBroker::findUser(int user_id)
+json UserBroker::findUser(USER_ID user_id)
 {
     std::string command;
     command = "select * from Users where UserID = " + std::to_string(user_id) + ";";
     mysqlpp::StoreQueryResult user = RelationalBroker::query(command);
     return storeQueryResultToJson(user);
+}
+
+bool UserBroker::isUserIDExists(USER_ID user_id)
+{
+    std::string command;
+    command = "select * from Users where UserID = " + std::to_string(user_id) + ";";
+    return RelationalBroker::query(command).size();
 }
 
 json UserBroker::storeQueryResultToJson(const mysqlpp::StoreQueryResult &user)

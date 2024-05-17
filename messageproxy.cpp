@@ -1,4 +1,4 @@
-#include "MessageProxy.h"
+#include "messageproxy.h"
 
 json MessageProxy::sendMessage() {}
 

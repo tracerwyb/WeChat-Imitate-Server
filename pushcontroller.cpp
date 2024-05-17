@@ -1,5 +1,5 @@
-#include "PushController.h"
-#include "netWork.h"
+#include "pushcontroller.h"
+#include "network.h"
 
 PushController *PushController::m_pushController;
 
@@ -17,7 +17,7 @@ void PushController::pushMessage(json msg, int object)
 {
     Network network;
     std::string msg_str = msg.dump();
-    network.sendMessage(object, msg_str.data());
+    network.sendMessage(object, msg_str.data(), msg_str.length());
 }
 
 void PushController::pushAddFriendRequest(int userID, int friendID)

@@ -33,3 +33,6 @@
 
 #external module
 json/
+
+# configure files
+*.user

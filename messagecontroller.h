@@ -1,7 +1,7 @@
 #ifndef MESSAGECONTROLLER_H
 #define MESSAGECONTROLLER_H
 
-#include "Controller.h"
+#include "controller.h"
 
 class MessageController : public Controller
 {

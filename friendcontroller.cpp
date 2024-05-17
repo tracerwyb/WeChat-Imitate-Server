@@ -1,7 +1,7 @@
-#include "FriendController.h"
-#include "UserBroker.h"
-#include "UserProxy.h"
-#include "netWork.h"
+#include "friendcontroller.h"
+#include "userbroker.h"
+#include "userproxy.h"
+#include "network.h"
 #include <iostream>
 #include <nlohmann/json.hpp>
 
@@ -42,7 +42,7 @@ void FriendController::pushAddFriendRequest(int user_id, int friend_id)
     std::string buf = friendRequest.dump();
     if (int friendConn = User::findUserConn(friend_id)) {
         Network network;
-        network.sendMessage(friendConn, buf.data());
+        network.sendMessage(friendConn, buf.data(), std::size(buf));
     }
 
     storeAddFriendInfo(user_id, friend_id);

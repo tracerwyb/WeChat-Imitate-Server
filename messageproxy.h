@@ -1,8 +1,8 @@
 #ifndef MESSAGEPROXY_H
 #define MESSAGEPROXY_H
 
-#include "Message.h"
-#include "MessageInterface.h"
+#include "messageinterface.h"
+#include "message.h"
 #include <vector>
 
 class MessageProxy : MessageInterface

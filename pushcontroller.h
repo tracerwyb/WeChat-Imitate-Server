@@ -1,7 +1,7 @@
 #ifndef PUSHCONTROLLER_H
 #define PUSHCONTROLLER_H
 
-#include "Controller.h"
+#include "controller.h"
 class PushController : public Controller
 {
 public:
