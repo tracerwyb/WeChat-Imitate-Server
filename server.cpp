@@ -14,7 +14,7 @@
 
 Server::Server()
 {
-    ThreadPool m_threadPool;
+  //  ThreadPool m_threadPool;
     InitController *m_ic;
     MessageController *m_mc;
     PushController *m_pc;

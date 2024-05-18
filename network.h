@@ -8,8 +8,9 @@ public:
     Network();
     void createSocket();
     int acceptSocket();
-    void recieveMessage(int cnnfd, char *buf);
-    void sendMessage(int cnnfd,char* ,int size);
+
+    void recieveMessage(int cnnfd,char* buf);
+    void sendMessage(int cnnfd,char*);
     int Select(int cnnfd);
 private:
     int m_listenfd;

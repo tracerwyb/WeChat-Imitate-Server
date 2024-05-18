@@ -1,13 +1,15 @@
 //#include<QDebug> must put forward,why?
-
-#include "network.h"
 #include <QDebug>
-#include "netinet/in.h"
-#include "string.h"
-#include "sys/socket.h"
+#include "network.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <sys/ioctl.h>
+
 //#include <sys/ioctl.h>
 
 #define BUF_SIZE  1024
+#define PORT 9879
 Network::Network() {}
 
 void Network::createSocket()
@@ -17,7 +19,7 @@ void Network::createSocket()
     bzero(&servaddr,sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = htonl((u_int32_t)0x00000000);
-    servaddr.sin_port = htons(9878);    //9878
+    servaddr.sin_port = htons(PORT);    //9878
     if(bind(m_listenfd,(struct sockaddr *)&servaddr,sizeof(servaddr)) < 0)
         qDebug()<<"bind socket erro!";
     else {
@@ -46,25 +48,31 @@ int Network::acceptSocket()
     return cnnfd;
 }
 
-void Network::recieveMessage(int cnnfd, char *buf)
+
+void Network::recieveMessage(int cnnfd,char* buf)
 {
+    int size=0;
+    read(cnnfd,&size,sizeof(size));
     int n{0};
     int offset{0};
     memset(buf,'\0',BUF_SIZE);
-    while ((strlen(buf) - n) > 0) {
-        n = read(cnnfd, buf + offset, strlen(buf));
+    while ((size-n)>0) {
+        n=read(cnnfd,buf+offset,1024);
         offset=offset+n;
         if(n<0)
             qDebug()<<"faild to read message from connect socket!";
         else {
-            qDebug()<<"n:"<<strlen(buf);
+            qDebug()<<"n:"<<n;
             qDebug()<<"succeed to reade msg from cnnfd :"<<buf;
         }
     }
 }
 
-void Network::sendMessage(int cnnfd,char* buf,int size)
+void Network::sendMessage(int cnnfd,char* buf)
 {
+    int size=strlen(buf);
+    write(cnnfd,&size,sizeof(size));
+    qDebug()<<"network.cpp sndmsg buf.len:"<<size;
     int n=0;
     int offset=0;
     while ((size-n)>0) {

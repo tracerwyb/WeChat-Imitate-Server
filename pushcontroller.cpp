@@ -19,7 +19,7 @@ void PushController::pushMessage(json msg, int object)
 {
     Network network;
     std::string msg_str = msg.dump();
-    network.sendMessage(object, msg_str.data(), msg_str.length());
+    network.sendMessage(object, msg_str.data());
 }
 
 void PushController::pushAddFriendRequest(int userID, int friendID)

@@ -2,7 +2,7 @@
 #define SERVER_H
 
 #include "controllerfactory.h"
-#include "threadpool.h"
+//#include "threadpool.h"
 
 class InitController;
 class MessageController;
@@ -12,7 +12,7 @@ class FriendController;
 class Server
 {
 private:
-    ThreadPool m_threadPool;
+//    ThreadPool m_threadPool;
     InitController *m_ic;
     MessageController *m_mc;
     PushController *m_pc;
