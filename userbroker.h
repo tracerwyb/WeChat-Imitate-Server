@@ -1,7 +1,6 @@
 #ifndef USERBROKER_H
 #define USERBROKER_H
 
-
 #include "relationalbroker.h"
 #include "nlohmann/json.hpp"
 

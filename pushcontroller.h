@@ -8,6 +8,7 @@ public:
     static PushController *getInstance();
     ~PushController();
     void pushMessage(json msg, int conn);
+    std::vector<unsigned char> pushMessage(nlohmann::json msg_json);
     void pushAddFriendRequest(int userID, int friendID);
 
 private:

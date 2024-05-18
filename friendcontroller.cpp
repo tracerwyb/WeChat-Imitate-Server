@@ -1,4 +1,3 @@
-
 #include "friendcontroller.h"
 #include "userbroker.h"
 #include "userproxy.h"

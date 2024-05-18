@@ -1,10 +1,8 @@
 #ifndef USER_H
 #define USER_H
 
-
 #include "userinterface.h"
 #include <map>
-#include <string>
 #include <vector>
 
 #define USER_ID unsigned int
@@ -29,7 +27,6 @@ public:
     User(int user_id);
     json getInfoFromDB();
     json toJson();
-
     void initFriendList();
     void updateFriendList(int friend_id, int state); // state: type of operation to friend
     static int findUserConn(int user_id);

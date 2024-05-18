@@ -10,7 +10,6 @@ void UserProxy::updateMusers(USER_ID user_id, USER_CONN user_conn)
 }
 
 void UserProxy::updateFriendList(USER_ID user_id, USER_ID friend_id, int state)
-
 {
     (new User(user_id))->updateFriendList(friend_id, state);
 }

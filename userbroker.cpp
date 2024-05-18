@@ -11,7 +11,6 @@ UserBroker *UserBroker::getInstance()
     return m_userBroker;
 }
 
-
 json UserBroker::findUser(USER_ID user_id)
 {
     std::string command;

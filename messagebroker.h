@@ -1,20 +1,27 @@
 #ifndef MESSAGEBROKER_H
 #define MESSAGEBROKER_H
-
 #include "relationalbroker.h"
-
+#include <ctime>
+class Message;
 class MessageBroker : RelationalBroker
 {
 public:
-    static MessageBroker *m_msgBroker;
-
+    MessageBroker();
     static MessageBroker *getInstance();
 
-    bool addNewMessage();
+    bool addNewMessage(unsigned int receiverid,
+                       unsigned int senderid,
+                       std::string content,
+                       time_t dateTime,
+                       std::string type);
 
-    bool delMsgForUser();
+    bool deleteMessage(unsigned int receiverid);
+    std::vector<Message> getMessage(unsigned int receiverid);
 
-    bool deleteMessage();
+private:
+    static MessageBroker *m_netizenBroker;
+    std::vector<Message> _msg;
+    std::string command;
 };
 
 #endif

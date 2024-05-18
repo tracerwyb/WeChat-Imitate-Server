@@ -88,12 +88,12 @@ Server::Server()
     // if client search a person by id
 
     // std::cout << m_fc->findFriendById(friend_id); // User*
+
     // get that person infomation
     // User user;
     // m_pc->pushMessage(user.getInfoFromDB(), user.findUserConn(friend_id));
     // pretend server has received message(add friend request) from client (message with user_id and friend_id)
     // m_fc->pushAddFriendRequest(user_id, friend_id);
-
     // m_fc->storeAddFriendInfo(user_id, friend_id);
 
     // if friend accept friend_request: update db sheet FriendRequest and Relation
