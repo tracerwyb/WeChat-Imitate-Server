@@ -1,10 +1,10 @@
 #ifndef CONTROLLERFACTORY_H
 #define CONTROLLERFACTORY_H
 
-#include "FriendController.h"
-#include "InitController.h"
-#include "MessageController.h"
-#include "PushController.h"
+#include "friendcontroller.h"
+#include "initcontroller.h"
+#include "messagecontroller.h"
+#include "pushcontroller.h"
 
 class ControllerFactory {
 public:

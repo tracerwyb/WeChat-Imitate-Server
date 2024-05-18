@@ -1,5 +1,5 @@
-#include "User.h"
-#include "UserBroker.h"
+#include "user.h"
+#include "userbroker.h"
 
 std::map<USER_ID, USER_CONN> User::m_users;
 

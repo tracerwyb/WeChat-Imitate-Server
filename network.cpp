@@ -1,10 +1,10 @@
 //#include<QDebug> must put forward,why?
 
-#include <QDebug>
 #include "network.h"
-#include "sys/socket.h"
+#include <QDebug>
 #include "netinet/in.h"
 #include "string.h"
+#include "sys/socket.h"
 //#include <sys/ioctl.h>
 
 #define BUF_SIZE  1024
@@ -41,18 +41,18 @@ int Network::acceptSocket()
         qDebug()<<"Accept socket failed. Errorn info";
     }
     else {
-        qDebug()<<"Accept succeed Client port:"<<cliaddr.sin_port;
+        qDebug() << "Accept succeed Client port:" << cliaddr.sin_port;
     }
     return cnnfd;
 }
 
-void Network::recieveMessage(int cnnfd,char* buf,int size)
+void Network::recieveMessage(int cnnfd, char *buf)
 {
     int n{0};
     int offset{0};
     memset(buf,'\0',BUF_SIZE);
-    while ((size-n)>0) {
-        n=read(cnnfd,buf+offset,size);
+    while ((strlen(buf) - n) > 0) {
+        n = read(cnnfd, buf + offset, strlen(buf));
         offset=offset+n;
         if(n<0)
             qDebug()<<"faild to read message from connect socket!";

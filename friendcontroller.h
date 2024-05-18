@@ -1,9 +1,9 @@
 #ifndef FRIENDCONTROLLER_H
 #define FRIENDCONTROLLER_H
 
+#include "user.h"
+#include "userinterface.h"
 #include "controller.h"
-#include "User.h"
-#include "UserInterface.h"
 class FriendController : public Controller
 {
 public:

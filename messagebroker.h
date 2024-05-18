@@ -1,7 +1,7 @@
 #ifndef MESSAGEBROKER_H
 #define MESSAGEBROKER_H
 
-#include "RelationalBroker.h"
+#include "relationalbroker.h"
 
 class MessageBroker : RelationalBroker
 {

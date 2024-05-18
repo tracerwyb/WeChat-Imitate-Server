@@ -1,4 +1,4 @@
-#include "ControllerFactory.h"
+#include "controllerfactory.h"
 
 ControllerFactory *ControllerFactory::m_controllerFactory;
 
