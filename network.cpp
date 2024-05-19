@@ -49,23 +49,30 @@ int Network::acceptSocket()
 }
 
 
-void Network::recieveMessage(int cnnfd,char* buf)
+
+int Network::recieveMessage(int cnnfd,char* buf)
 {
     int size=0;
-    read(cnnfd,&size,sizeof(size));
-    int n{0};
-    int offset{0};
-    memset(buf,'\0',BUF_SIZE);
-    while ((size-n)>0) {
-        n=read(cnnfd,buf+offset,1024);
-        offset=offset+n;
-        if(n<0)
-            qDebug()<<"faild to read message from connect socket!";
-        else {
-            qDebug()<<"n:"<<n;
-            qDebug()<<"succeed to reade msg from cnnfd :"<<buf;
+    int readbyte=read(cnnfd,&size,sizeof(size));
+    if(readbyte<=0){   //套接字关闭或中断
+        return -1;
+    }
+    else {
+        int n{0};
+        int offset{0};
+        memset(buf,'\0',BUF_SIZE);
+        while ((size-n)>0) {
+            n=read(cnnfd,buf+offset,1024);
+            offset=offset+n;
+            if(n<0)
+                qDebug()<<"faild to read message from connect socket!";
+            else {
+                qDebug()<<"n:"<<n;
+                qDebug()<<"succeed to reade msg from cnnfd :"<<buf;
+            }
         }
     }
+    return 0;
 }
 
 void Network::sendMessage(int cnnfd,char* buf)

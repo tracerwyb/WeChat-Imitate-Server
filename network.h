@@ -9,7 +9,7 @@ public:
     void createSocket();
     int acceptSocket();
 
-    void recieveMessage(int cnnfd,char* buf);
+    int recieveMessage(int cnnfd,char* buf);
     void sendMessage(int cnnfd,char*);
     int Select(int cnnfd);
 private:

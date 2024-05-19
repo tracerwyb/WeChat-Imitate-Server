@@ -12,7 +12,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 include_directories("/usr/include")
 #include_directories("/usr/include")
-#link_directories("/usr/include")
+link_directories("/usr/include")
 link_libraries("/usr/lib/")
 
 
@@ -39,7 +39,7 @@ add_executable(WeChat-Imitate-Server
 
     server.cpp          server.h
     network.cpp         network.h
-    threadpool.cpp        threadpool.h
+    task.cpp   task.h
 )
 
 target_compile_features( WeChat-Imitate-Server PRIVATE cxx_std_20 )
