@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <QThreadPool>
-
+#include <QDebug>
 #define ADDFRIEND 1
 #define DELETEFRIEND -1
 #define BUF_SIZE 1024
@@ -14,7 +14,7 @@
 Server::Server()
 {
   //  ThreadPool m_threadPool;
-    InitController *m_ic;
+    /*InitController *m_ic;
     MessageController *m_mc;
     PushController *m_pc;
     FriendController *m_fc;
@@ -25,7 +25,7 @@ Server::Server()
 
     m_ic->initDatabase();
     m_ic->createWorkDir();
-
+*/
     //Network network;
     //network.createSocket(); //
 
