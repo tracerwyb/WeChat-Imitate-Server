@@ -1,16 +1,4 @@
-#include <QDebug>
-#include "relationalbroker.h"
 #include "server.h"
-#include "message.h"
-#include "network.h"
-#include <sys/ioctl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#include "messagecontroller.h"
-#include "pushcontroller.h"
-#include <filesystem>
-#include <iostream>
 //#include <opencv4/opencv2/imgcodecs.hpp>
 //#include <opencv4/opencv2/opencv.hpp>
 
@@ -21,6 +9,8 @@ int main()
     // r.query("select * from Relation;");
     // r.query("select * from Users;");
     Server server;
+    server.start();
+    
 }
 /*
 void  init(){
