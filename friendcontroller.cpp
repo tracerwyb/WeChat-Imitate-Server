@@ -42,7 +42,7 @@ void FriendController::pushAddFriendRequest(int user_id, int friend_id)
     std::string buf = friendRequest.dump();
     if (int friendConn = User::findUserConn(friend_id)) {
         Network network;
-        network.sendMessage(friendConn, buf.data(), std::size(buf));
+        network.sendMessage(friendConn, buf.data());
     }
 
     storeAddFriendInfo(user_id, friend_id);

@@ -1,12 +1,11 @@
 #include "server.h"
-#include <QDebug>
-#include <iostream>
-
+#include "task.h"
 #include "message.h"
 #include "network.h"
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <QThreadPool>
 
 #define ADDFRIEND 1
 #define DELETEFRIEND -1
@@ -14,7 +13,7 @@
 
 Server::Server()
 {
-    ThreadPool m_threadPool;
+  //  ThreadPool m_threadPool;
     InitController *m_ic;
     MessageController *m_mc;
     PushController *m_pc;
@@ -27,8 +26,8 @@ Server::Server()
     m_ic->initDatabase();
     m_ic->createWorkDir();
 
-    Network network;
-    network.createSocket(); //
+    //Network network;
+    //network.createSocket(); //
 
     // // ------------------------------------------------------------------------------------------
     // int user_id, friend_id;
@@ -99,11 +98,24 @@ Server::Server()
     // if friend accept friend_request: update db sheet FriendRequest and Relation
     // m_fc->updateFriendList(user_id, friend_id, DELETEFRIEND);
 }
+void Server::start()
+{
+    Network network;
+    network.createSocket();//
 
-void Server::start() {}
+    QThreadPool::globalInstance()->setMaxThreadCount(50);
 
+    while(1){
+        int cnnfd=network.acceptSocket();
+        Task* ts=new Task(cnnfd); //传入连接套接字描述符，任务函数读取这条消息，找到接收者id并查找套接字描述符转发
+        QThreadPool::globalInstance()->start(ts);  //将请求放入线程池的任务队列中，等待线程执行
+    }
+}
 void Server::processClientRequest(int &fd) {}
 
-bool Server::receive() {}
+bool Server::receive() {return true;}
 
 void Server::send() {}
+
+
+

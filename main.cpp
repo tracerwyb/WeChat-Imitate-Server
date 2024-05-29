@@ -1,18 +1,6 @@
-#include <QDebug>
-#include "relationalbroker.h"
 #include "server.h"
-#include "message.h"
-#include "network.h"
-#include <sys/ioctl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#include "messagecontroller.h"
-#include "pushcontroller.h"
-#include <filesystem>
-#include <iostream>
-#include <opencv4/opencv2/imgcodecs.hpp>
-#include <opencv4/opencv2/opencv.hpp>
+//#include <opencv4/opencv2/imgcodecs.hpp>
+//#include <opencv4/opencv2/opencv.hpp>
 
 int main()
 {
@@ -21,7 +9,9 @@ int main()
     // r.query("select * from Relation;");
     // r.query("select * from Users;");
     Server server;
-
+    server.start();
+    
+}
 /*
 void  init(){
     std::filesystem::path current_path = std::filesystem::current_path();
@@ -94,5 +84,29 @@ bool test1_store(){
         }
         return 0;
     }
-*/
 }
+
+/*
+// zhangjing main test
+#include "network.h"
+#include "message.h"
+#include "task.h"
+#include <QDebug>
+#include <sys/ioctl.h>
+#include <nlohmann/json.hpp>
+#include <iostream>
+#include <QThreadPool>
+int main(int argc, char *argv[])
+{
+    Network network;
+    network.createSocket();//
+
+    QThreadPool::globalInstance()->setMaxThreadCount(5);
+
+    while(1){
+        int cnnfd=network.acceptSocket();
+        Task* ts=new Task(cnnfd); //传入连接套接字描述符，任务函数读取这条消息，找到接收者id并查找套接字描述符转发
+        QThreadPool::globalInstance()->start(ts);  //将请求放入线程池的任务队列中，等待线程执行
+    }
+}
+*/

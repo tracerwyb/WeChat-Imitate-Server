@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.26)
 
 project(WeChat-Imitate-Server LANGUAGES CXX)
 
@@ -6,11 +6,16 @@ include_directories("/usr/include/mysql/")  #add include directories
 link_directories("/usr/lib/")  #add lib directories
 LINK_LIBRARIES(libmysqlpp.so.3.3.0)  #add lib
 
-find_package(OpenCV REQUIRED)
+#find_package(OpenCV REQUIRED)
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 include_directories("/usr/include")
+#include_directories("/usr/include")
+link_directories("/usr/include")
+
 link_libraries("/usr/lib/")
+
 
 add_executable(WeChat-Imitate-Server
     main.cpp
@@ -35,7 +40,7 @@ add_executable(WeChat-Imitate-Server
 
     server.cpp          server.h
     network.cpp         network.h
-    threadpool.cpp        threadpool.h
+    task.cpp   task.h
 )
 
 target_compile_features( WeChat-Imitate-Server PRIVATE cxx_std_20 )
@@ -51,6 +56,21 @@ target_link_libraries(WeChat-Imitate-Server
         opencv_highgui
         Qt6::Widgets
 )
+
+
+
+include(GNUInstallDirs)
+install(TARGETS WeChat-Imitate-Server
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+
+# Define target properties for Android with Qt 6 as:
+#    set_property(TARGET WeChat-Imitate-Server APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
 
 
@@ -193,7 +213,7 @@ target_link_libraries(WeChat-Imitate-Server
 
 # cmake_minimum_required(VERSION 3.5)
 # 
-# project(server-network VERSION 0.1 LANGUAGES CXX)
+# project(WeChat-Imitate-Server VERSION 0.1 LANGUAGES CXX)
 # 
 # set(CMAKE_AUTOUIC ON)
 # set(CMAKE_AUTOMOC ON)
@@ -225,12 +245,12 @@ target_link_libraries(WeChat-Imitate-Server
 # )
 # 
 # if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-#     qt_add_executable(server-network
+#     qt_add_executable(WeChat-Imitate-Server
 #         MANUAL_FINALIZATION
 #         ${PROJECT_SOURCES}
 #     )
 # # Define target properties for Android with Qt 6 as:
-# #    set_property(TARGET server-network APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+# #    set_property(TARGET WeChat-Imitate-Server APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 # #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 # @if false
@@ -239,13 +259,13 @@ target_link_libraries(WeChat-Imitate-Server
 # @endif
 # else()
 #     if(ANDROID)
-#         add_library(server-network SHARED
+#         add_library(WeChat-Imitate-Server SHARED
 #             ${PROJECT_SOURCES}
 #         )
 # # Define properties for Android with Qt 5 after find_package() calls as:
 # #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
 #     else()
-#         add_executable(server-network
+#         add_executable(WeChat-Imitate-Server
 #             ${PROJECT_SOURCES}
 #         )
 #     endif()
@@ -255,15 +275,15 @@ target_link_libraries(WeChat-Imitate-Server
 # @endif
 # endif()
 # 
-# target_link_libraries(server-network PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+# target_link_libraries(WeChat-Imitate-Server PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 # 
 # # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # # If you are developing for iOS or macOS you should consider setting an
 # # explicit, fixed bundle identifier manually though.
 # if(${QT_VERSION} VERSION_LESS 6.1.0)
-#   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.server-network)
+#   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.WeChat-Imitate-Server)
 # endif()
-# set_target_properties(server-network PROPERTIES
+# set_target_properties(WeChat-Imitate-Server PROPERTIES
 #     ${BUNDLE_ID_OPTION}
 #     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
 #     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -272,18 +292,20 @@ target_link_libraries(WeChat-Imitate-Server
 # )
 # 
 # include(GNUInstallDirs)
-# install(TARGETS server-network
+# install(TARGETS WeChat-Imitate-Server
 #     BUNDLE DESTINATION .
 #     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 #     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 # )
 # 
 # if(QT_VERSION_MAJOR EQUAL 6)
-#     qt_finalize_executable(server-network)
+#     qt_finalize_executable(WeChat-Imitate-Server)
 # endif()
+
 ###完整的project命令
 #project( WeChat-Imitate-Server LANGUAGES CXX )
          # DESCRIPTION "Description of project" HOMEPAGE_URL "http://www.abc.com" VERSION 0.1.0 )
 #execute_process(COMMAND g++ -std=c++20 -xc++-system-header -fmodules-ts # 如何要使用modules,该命令应该放在project命令之后
 #                iostream
 #                string )
+
