@@ -10,8 +10,6 @@ find_package(OpenCV REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 include_directories("/usr/include")
-#include_directories("/usr/include")
-#link_directories("/usr/include")
 link_libraries("/usr/lib/")
 
 add_executable(WeChat-Imitate-Server
