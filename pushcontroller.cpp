@@ -1,5 +1,6 @@
 #include "pushcontroller.h"
 #include "network.h"
+#include "user.h"
 #include <fstream>
 #include <iostream>
 
@@ -22,9 +23,19 @@ void PushController::pushMessage(json msg, int object)
     network.sendMessage(object, msg_str.data());
 }
 
-void PushController::pushAddFriendRequest(int userID, int friendID)
+void PushController::pushAddFriendRequest(int user_id, int friend_id)
 {
-    // netWork
+    json friendRequest;
+
+    friendRequest["type"] = {"FriendRequest"};
+    friendRequest["user_id"] = {user_id};
+    friendRequest["friend_id"] = {friend_id};
+
+    std::string buf = friendRequest.dump();
+    if (int friendConn = User::findUserConn(friend_id)) {
+        Network network;
+        network.sendMessage(friendConn, buf.data());
+    }
 }
 
 std::vector<unsigned char> PushController::pushMessage(nlohmann::json msg_json)

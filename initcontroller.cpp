@@ -23,7 +23,7 @@ InitController *InitController::getInstance()
     return m_initController;
 }
 
-void InitController::recordUserConn(int user_id, int user_conn)
+void InitController::recordUserConn(USER_ID user_id, USER_CONN user_conn)
 {
     (new UserProxy())->updateMusers(user_id, user_conn);
 }
