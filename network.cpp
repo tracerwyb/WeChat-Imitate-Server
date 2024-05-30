@@ -64,8 +64,10 @@ int Network::recieveMessage(int cnnfd,char* buf)
         while ((size-n)>0) {
             n=read(cnnfd,buf+offset,1024);
             offset=offset+n;
-            if(n<0)
+            if(n<0){
                 qDebug()<<"faild to read message from connect socket!";
+                break;
+            }
             else {
                 qDebug()<<"n:"<<n;
                 qDebug()<<"succeed to reade msg from cnnfd :"<<buf;
@@ -85,8 +87,10 @@ void Network::sendMessage(int cnnfd,char* buf)
     while ((size-n)>0) {
         n=write(cnnfd,buf+offset,size);
         offset=offset+n;
-        if(n<0)
+        if(n<0){
             qDebug()<<"failed to write msg to connfd socket!";
+            break;
+        }
         else
             qDebug()<<"write to socket succeed!n="<<n<<"   msg:"<<buf;
     }

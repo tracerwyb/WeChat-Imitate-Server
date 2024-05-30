@@ -20,6 +20,10 @@ public:
                           time_t dateTime,
                           std::string type);
     std::vector<nlohmann::json> pushMessage(unsigned int receiverid);
+
+private:
+    static MessageController *m_msgController;
+
 };
 
 #endif

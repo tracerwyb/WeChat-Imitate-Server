@@ -3,7 +3,14 @@
 #include "messagebroker.h"
 #include "messageproxy.h"
 
-MessageController *MessageController::getInstance() {}
+MessageController *MessageController::m_msgController;
+
+MessageController *MessageController::getInstance() {
+    if (m_msgController == nullptr) {
+        m_msgController = new MessageController();
+    }
+    return m_msgController;
+}
 //Message会将byte处理为path-string
 void MessageController::storeMessageInfo(unsigned int receiverid,
                                          unsigned int senderid,

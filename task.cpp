@@ -8,6 +8,12 @@
 
 Task::Task(int fd1):QRunnable(),cnnfd{fd1}{
     setAutoDelete(true);
+    m_ic = ControllerFactory::getInstance()->createInitController();
+    m_mc = ControllerFactory::getInstance()->createMessageController();
+    m_pc = ControllerFactory::getInstance()->createPushController();
+    m_fc = ControllerFactory::getInstance()->createFriendController();
+    m_ic->initDatabase();
+    m_ic->createWorkDir();
 }
 
 void Task::run()
@@ -45,7 +51,7 @@ void Task::run()
             if(request_type == "sendmsg")
             {
                 qDebug()<<"sleep 10s";
-                sleep(50);                       //可删，防止测试时,时间太短另外一个用户还没连上加入到容器中
+                sleep(30);                       //可删，防止测试时,时间太短另外一个用户还没连上加入到容器中
                 qDebug()<<"sleep over";
                 int cnnfd2=userproxy.findUserConn(acid);   //通过接受者id查找已连接描述符
 
@@ -56,7 +62,7 @@ void Task::run()
                     qDebug()<<"can't find cnnfd2!";    //从这里续写如果接收端不在线，将数据存入数据库
                 }
                 else{
-                    network.sendMessage(cnnfd2,content.data());
+                    network.sendMessage(cnnfd2,buf);
                 }
             }
             if(request_type == "recieveuser"){          //从数据库中读取数据（初始化预览界面）
