@@ -16,7 +16,8 @@ private:
     PushController *m_pc;
     FriendController *m_fc;
     ControllerFactory *m_controllerFactory;
-    //int cnnfd2;
+    //int cnnfd2
+
 public:
     explicit Task(int fd1);
     //~Task();

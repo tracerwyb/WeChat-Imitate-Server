@@ -26,6 +26,7 @@ Server::Server()
     m_ic->initDatabase();
     m_ic->createWorkDir();
 */
+
     //Network network;
     //network.createSocket(); //
 

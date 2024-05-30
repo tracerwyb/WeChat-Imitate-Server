@@ -16,7 +16,7 @@ json UserBroker::findUser(USER_ID user_id)
     std::string command;
     command = "select * from Users where UserID = " + std::to_string(user_id) + ";";
     mysqlpp::StoreQueryResult user = RelationalBroker::query(command);
-    return storeQueryResultToJson(user);
+    return storeQueryResultToJson(user, "user_info");
 }
 
 bool UserBroker::isUserIDExists(USER_ID user_id)
@@ -26,9 +26,11 @@ bool UserBroker::isUserIDExists(USER_ID user_id)
     return RelationalBroker::query(command).size();
 }
 
-json UserBroker::storeQueryResultToJson(const mysqlpp::StoreQueryResult &user)
+json UserBroker::storeQueryResultToJson(const mysqlpp::StoreQueryResult &user,
+                                        const std::string msg_type)
 {
     json jsonArray;
+    jsonArray["request_type"] = msg_type;
     for (size_t i = 0; i < user.num_rows(); ++i) {
         json jsonObject;
         for (size_t j = 0; j < user.num_fields(); ++j) {

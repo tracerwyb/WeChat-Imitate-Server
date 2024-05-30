@@ -1,17 +1,19 @@
 #include "task.h"
+#include <QDebug>
 #include "network.h"
 #include "user.h"
 #include "userproxy.h"
-#include <QDebug>
-#include <nlohmann/json.hpp>
 #include <iostream>
+#include <nlohmann/json.hpp>
 
 Task::Task(int fd1):QRunnable(),cnnfd{fd1}{
     setAutoDelete(true);
+
     m_ic = ControllerFactory::getInstance()->createInitController();
     m_mc = ControllerFactory::getInstance()->createMessageController();
     m_pc = ControllerFactory::getInstance()->createPushController();
     m_fc = ControllerFactory::getInstance()->createFriendController();
+
     m_ic->initDatabase();
     m_ic->createWorkDir();
 }
@@ -35,7 +37,7 @@ void Task::run()
             break;
         }
         else{
-            auto j=nlohmann::json::parse(buf);
+            auto j = nlohmann::json::parse(buf);
 
             id=j.at("myid");
             std::cout<<"json object id:"<<id<<std::endl;
@@ -72,10 +74,32 @@ void Task::run()
 
             }
             if(request_type == "findfriend"){
-
             }
             if(request_type == "mine"){
+            }
+            if (request_type == "getfribaseinfo") {
+                json fri_info = m_fc->findFriendById(j.at("friendID"));
+                network.sendMessage(cnnfd, (fri_info.dump()).data());
+            }
 
+            if (request_type == "addfriend") {
+                int targetid = j.at("target_id");
+                m_fc->storeAddFriendInfo(j.at("my_id"), targetid);
+                int target_conn = userproxy.findUserConn(targetid);
+                if (target_conn != 0) {
+                    network.sendMessage(target_conn, buf);
+                }
+            }
+
+            if (request_type == "acceptfrinfo") {
+                int userid = j.at("acceptor_id");
+                int friendid = j.at("requestsender_id");
+
+                int target_conn = userproxy.findUserConn(friendid);
+                if (target_conn != 0) {
+                    network.sendMessage(target_conn, buf);
+                }
+                userproxy.updateFriendList(userid, friendid, 1);
             }
         }
     }

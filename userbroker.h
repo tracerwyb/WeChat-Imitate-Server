@@ -23,7 +23,7 @@ public:
     bool deleteFriendRelation(USER_ID user_id, USER_ID friend_id);
     bool logOffUser();
     bool modifyUserInfo();
-    json storeQueryResultToJson(const mysqlpp::StoreQueryResult &user);
+    json storeQueryResultToJson(const mysqlpp::StoreQueryResult &user, const std::string msg_type);
 };
 
 #endif
