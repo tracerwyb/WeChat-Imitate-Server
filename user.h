@@ -27,6 +27,7 @@ public:
     User(int user_id);
     json getInfoFromDB();
     json toJson();
+    bool isFriend(int friend_id);
     void initFriendList();
     void updateFriendList(int friend_id, int state); // state: type of operation to friend
     static int findUserConn(int user_id);

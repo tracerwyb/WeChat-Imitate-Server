@@ -1,6 +1,14 @@
 #include "userbroker.h"
+#include <QDebug>
 #include "relationalbroker.h"
+#include <iostream>
+#include <mysql++/mysql++.h>
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 #include <time.h>
+
+using namespace rapidjson;
 
 UserBroker *UserBroker::m_userBroker = nullptr;
 
@@ -16,7 +24,21 @@ json UserBroker::findUser(USER_ID user_id)
     std::string command;
     command = "select * from Users where UserID = " + std::to_string(user_id) + ";";
     mysqlpp::StoreQueryResult user = RelationalBroker::query(command);
-    return storeQueryResultToJson(user, "user_info");
+    qDebug() << user.data();
+    return storeQueryResultToJson_Users(user, "user_info");
+}
+
+bool UserBroker::isFriend(USER_ID user_id, USER_ID friend_id)
+{
+    std::string command;
+    command = "select * from Relation where (User1ID = " + std::to_string(user_id)
+              + " AND User2ID = " + std::to_string(friend_id) + ") OR (User1ID = "
+              + std::to_string(friend_id) + " AND User2ID = " + std::to_string(user_id) + ");";
+    if (RelationalBroker::query(command).size() != 0) {
+        return true;
+    }
+    return false;
+    // size == 0 -> return false
 }
 
 bool UserBroker::isUserIDExists(USER_ID user_id)
@@ -26,18 +48,59 @@ bool UserBroker::isUserIDExists(USER_ID user_id)
     return RelationalBroker::query(command).size();
 }
 
-json UserBroker::storeQueryResultToJson(const mysqlpp::StoreQueryResult &user,
-                                        const std::string msg_type)
+std::string UserBroker::findValueOfField(const mysqlpp::StoreQueryResult &user,
+                                         const std::string fieldName,
+                                         int rowIndex)
+{
+    std::string fieldValue;
+
+    if (!user.empty() && rowIndex >= 0 && rowIndex < user.size()) {
+        // 使用指定行的字段值
+        const mysqlpp::Row &currentRow = user[rowIndex];
+
+        // 使用字段名获取字段的索引
+        int fieldIndex = user.field_num(fieldName);
+
+        // 检查字段是否存在
+        if (fieldIndex != -1) {
+            // 获取字段值
+            fieldValue = currentRow[fieldIndex].data();
+            // 输出字段的值
+            // std::cout << "Value of field " << fieldName << ": " << fieldValue << std::endl;
+        } else {
+            std::cerr << "Field '" << fieldName << "' not found in the result set." << std::endl;
+        }
+    } else {
+        std::cerr << "Result set is empty or row index is out of range." << std::endl;
+    }
+
+    return fieldValue;
+}
+
+json UserBroker::storeQueryResultToJson_Users(const mysqlpp::StoreQueryResult &user,
+                                              const std::string msgType)
 {
     json jsonArray;
-    jsonArray["request_type"] = msg_type;
-    for (size_t i = 0; i < user.num_rows(); ++i) {
-        json jsonObject;
-        for (size_t j = 0; j < user.num_fields(); ++j) {
-            jsonObject[user.field_name(j)] = user[i][j].c_str();
-        }
-        jsonArray.push_back(jsonObject);
+
+    // 遍历每一行并将字段值存储到 JSON 对象中
+    for (size_t i = 0; i < user.size(); ++i) {
+        json userData;
+        userData["request_type"] = msgType;
+        userData["friendID"] = findValueOfField(user, "UserID", i);
+        userData["nickname"] = findValueOfField(user, "U_Nickname", i);
+        userData["avatar_path_"] = findValueOfField(user, "U_Avater", i);
+        userData["gender"] = findValueOfField(user, "U_Gender", i);
+        userData["area"] = findValueOfField(user, "U_Area", i);
+        userData["signature"] = findValueOfField(user, "U_Signature", i);
+        userData["memo"]
+            = findValueOfField(user,
+                               "U_Nickname",
+                               i); // 注意：此处 fieldName 使用了 "U_Nickname"，而不是 "memo"
+
+        jsonArray = userData;
     }
+
+    qDebug() << jsonArray.dump();
     return jsonArray;
 }
 
