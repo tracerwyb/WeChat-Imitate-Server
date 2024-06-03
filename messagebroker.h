@@ -12,7 +12,7 @@ public:
     bool addNewMessage(unsigned int receiverid,
                        unsigned int senderid,
                        std::string content,
-                       time_t dateTime,
+                       std::string dateTime,
                        std::string type);
 
     bool deleteMessage(unsigned int receiverid);

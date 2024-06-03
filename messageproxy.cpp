@@ -3,7 +3,7 @@
 void MessageProxy::storeMessage(unsigned int receiverid,
                                 unsigned int senderid,
                                 std::string content,
-                                time_t dateTime,
+                                std::string dateTime,
                                 std::string type)
 {
     auto broker = MessageBroker::getInstance();
@@ -12,7 +12,7 @@ void MessageProxy::storeMessage(unsigned int receiverid,
 void MessageProxy::storeMessage(unsigned int receiverid,
                                 unsigned int senderid,
                                 std::vector<unsigned char> content,
-                                time_t dateTime,
+                                std::string dateTime,
                                 std::string type)
 {
     auto broker = MessageBroker::getInstance();
@@ -23,9 +23,10 @@ void MessageProxy::storeMessage(unsigned int receiverid,
 //一次性读取;一次性发送/多次发送for循环
 std::vector<nlohmann::json> MessageProxy::pushMessage(unsigned int receiverid)
 {
+    std::cout << " in proxy";
     auto broker = MessageBroker::getInstance();
     m_msg_sequence = broker->getMessage(receiverid);
-    int size = m_msg_sequence_json.size();
+    int size = m_msg_sequence.size();
     for (int i = 0; i < size; i++) {
         m_msg_sequence_json.push_back(m_msg_sequence[i].getAbstract());
     }

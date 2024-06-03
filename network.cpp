@@ -62,7 +62,7 @@ int Network::recieveMessage(int cnnfd,char* buf)
         int offset{0};
         memset(buf,'\0',BUF_SIZE);
         while ((size-n)>0) {
-            n=read(cnnfd,buf+offset,1024);
+            n = read(cnnfd, buf + offset, size);
             offset=offset+n;
             if(n<0){
                 qDebug()<<"faild to read message from connect socket!";
@@ -83,11 +83,13 @@ void Network::sendMessage(int cnnfd,char* buf)
     write(cnnfd,&size,sizeof(size));
     qDebug()<<"network.cpp sndmsg buf.len:"<<size;
     int n=0;
-    int offset=0;
+    int offset = 0;
+    qDebug() << "文件描述符：" << cnnfd;
     while ((size-n)>0) {
         n=write(cnnfd,buf+offset,size);
         offset=offset+n;
         if(n<0){
+            fprintf(stderr, "recv failed: %s\n", strerror(errno));
             qDebug()<<"failed to write msg to connfd socket!";
             break;
         }

@@ -15,14 +15,14 @@ private:
     unsigned int senderid;
     std::string type;
     std::string content;
-    time_t dateTime;
+    std::string dateTime;
 
 public:
     Message();
     Message(unsigned int _receiverid,
             unsigned int _senderid,
             std::string _content,
-            time_t _dateTime,
+            std::string _dateTime,
             std::string _type);
     nlohmann::json getAbstract();
     std::vector<unsigned char> getByteAbstract();

@@ -67,6 +67,7 @@ void RelationalBroker::initDataBase()
 
 mysqlpp::StoreQueryResult RelationalBroker::query(std::string command)
 {
+    std::cerr << "正在查询数据库的信息 " << std::endl;
     mysqlpp::StoreQueryResult res;
     try {
         mysqlpp::Query query = m_connection->query();
@@ -78,6 +79,7 @@ mysqlpp::StoreQueryResult RelationalBroker::query(std::string command)
     //显示数据
     mysqlpp::StoreQueryResult::const_iterator it; // 迭代器
     size_t numFields = res.num_fields();
+    std::cerr << "成功查询数据库的信息！" << std::endl;
     for (it = res.begin(); it != res.end(); ++it) {
         for (size_t j = 0; j < numFields; ++j) {
             mysqlpp::Row row = *it;
@@ -85,7 +87,6 @@ mysqlpp::StoreQueryResult RelationalBroker::query(std::string command)
             std::cout << row[j] << "\t";
         }
         std::cout << std::endl;
-        // std::cout << '\t' << row[0] << row[1] << std::endl;
     }
     return res;
 }
