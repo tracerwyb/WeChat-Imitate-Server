@@ -13,12 +13,12 @@ public:
     void storeMessage(unsigned int receiverid,
                       unsigned int senderid,
                       std::string content,
-                      time_t dateTime,
+                      std::string dateTime,
                       std::string type);
     void storeMessage(unsigned int receiverid,
                       unsigned int senderid,
                       std::vector<unsigned char> content,
-                      time_t dateTime,
+                      std::string dateTime,
                       std::string type);
     std::vector<nlohmann::json> pushMessage(unsigned int receiverid);
 

@@ -6,7 +6,6 @@
 #include "pushcontroller.h"
 #include "friendcontroller.h"
 #include "controllerfactory.h"
-
 class Task:public QRunnable
 {
 private:
