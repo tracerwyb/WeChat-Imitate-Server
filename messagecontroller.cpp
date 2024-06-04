@@ -15,7 +15,7 @@ MessageController *MessageController::getInstance() {
 void MessageController::storeMessageInfo(unsigned int receiverid,
                                          unsigned int senderid,
                                          std::vector<unsigned char> byte_Stream,
-                                         time_t dateTime,
+                                         std::string dateTime,
                                          std::string type)
 {
     Message msg;
@@ -26,7 +26,7 @@ void MessageController::storeMessageInfo(unsigned int receiverid,
 void MessageController::storeMessageInfo(unsigned int receiverid,
                                          unsigned int senderid,
                                          std::string content,
-                                         time_t dateTime,
+                                         std::string dateTime,
                                          std::string type)
 {
     MessageProxy m_proxy;
@@ -35,6 +35,7 @@ void MessageController::storeMessageInfo(unsigned int receiverid,
 
 std::vector<nlohmann::json> MessageController::pushMessage(unsigned int receiverid)
 {
+    std::cout << "in controller";
     MessageProxy m_proxy;
     return (m_proxy.pushMessage(receiverid));
     //消息包含receiverid, senderid, content, dateTime

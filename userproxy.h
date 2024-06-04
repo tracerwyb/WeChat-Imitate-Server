@@ -15,6 +15,7 @@ public:
     json findFriendByID(USER_ID friend_id);
     json toJson(User *user);
     void initFriendList();
+    bool isFriend(USER_ID user_id, USER_ID friend_id);
 };
 
 #endif

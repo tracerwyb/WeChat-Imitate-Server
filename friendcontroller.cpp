@@ -1,4 +1,5 @@
 #include "friendcontroller.h"
+#include <QDebug>
 #include "network.h"
 #include "pushcontroller.h"
 #include "userbroker.h"
@@ -24,6 +25,23 @@ FriendController *FriendController::getInstance()
 json FriendController::findFriendById(int friend_id)
 {
     return userproxy->findFriendByID(friend_id);
+}
+
+json FriendController::isFriend(int user_id, int friend_id)
+{
+    json isfriend;
+    isfriend["request_type"] = "isfriend";
+    // isfriend["myid"] = user_id;
+    // isfriend["friendID"] = std::to_string(friend_id);
+    // qDebug() << "userproxy->isFriend(user_id, friend_id):"
+    // << userproxy->isFriend(user_id, friend_id);
+    if (userproxy->isFriend(user_id, friend_id)) {
+        isfriend["isfriend"] = "true";
+    } else {
+        isfriend["isfriend"] = "false";
+    }
+    // qDebug() << "isfriend_bool: " << (isfriend["isfriend"]).dump();
+    return isfriend;
 }
 
 void FriendController::storeAddFriendInfo(int user_id, int friend_id)

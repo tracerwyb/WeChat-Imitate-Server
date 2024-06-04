@@ -9,7 +9,7 @@
 //#include <sys/ioctl.h>
 
 #define BUF_SIZE  1024
-#define PORT 9879
+#define PORT 9878
 Network::Network() {}
 
 void Network::createSocket()
@@ -54,6 +54,7 @@ int Network::recieveMessage(int cnnfd,char* buf)
 {
     int size=0;
     int readbyte=read(cnnfd,&size,sizeof(size));
+    qDebug() << "read size :" << size;
     if(readbyte<=0){   //套接字关闭或中断
         return -1;
     }
@@ -83,11 +84,13 @@ void Network::sendMessage(int cnnfd,char* buf)
     write(cnnfd,&size,sizeof(size));
     qDebug()<<"network.cpp sndmsg buf.len:"<<size;
     int n=0;
-    int offset=0;
+    int offset = 0;
+    qDebug() << "文件描述符：" << cnnfd;
     while ((size-n)>0) {
         n=write(cnnfd,buf+offset,size);
         offset=offset+n;
-        if(n  <0){
+        if(n<0){
+            fprintf(stderr, "recv failed: %s\n", strerror(errno));
             qDebug()<<"failed to write msg to connfd socket!";
             break;
         }

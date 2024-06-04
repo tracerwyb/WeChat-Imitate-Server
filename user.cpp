@@ -1,4 +1,5 @@
 #include "user.h"
+#include <QDebug>
 #include "userbroker.h"
 
 std::map<USER_ID, USER_CONN> User::m_users;
@@ -17,6 +18,11 @@ json User::getInfoFromDB()
 int User::findUserConn(int user_id)
 {
     return m_users[user_id];
+}
+
+bool User::isFriend(int friend_id)
+{
+    return UserBroker::getInstance()->isFriend(m_user_id, friend_id);
 }
 
 json User::toJson()
@@ -45,6 +51,8 @@ bool User::initializeMUsers()
 void User::updateMUsers(USER_ID user_id, USER_CONN user_conn)
 {
     m_users.insert(std::make_pair(user_id, user_conn));
+    qDebug() << m_users;
+    qDebug() << m_users[user_id];
     // m_users[user_id] = user_conn;
 }
 

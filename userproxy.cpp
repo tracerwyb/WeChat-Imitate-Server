@@ -32,3 +32,9 @@ int UserProxy::findUserConn(USER_ID user_id)
 {
     return User::findUserConn(user_id);
 }
+
+bool UserProxy::isFriend(USER_ID user_id, USER_ID friend_id)
+{
+    User user(user_id);
+    return user.isFriend(friend_id);
+}
