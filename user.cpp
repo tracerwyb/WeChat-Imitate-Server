@@ -17,6 +17,7 @@ json User::getInfoFromDB()
 
 int User::findUserConn(int user_id)
 {
+    qDebug() << m_users;
     return m_users[user_id];
 }
 

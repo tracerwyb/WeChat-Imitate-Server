@@ -34,14 +34,6 @@ void Task::run()
     userproxy.updateMUsers(id, cnnfd);
     //用id和已连接描述符更新容器   但是这样每次都要重新赋值会不会浪费资源，且考虑加锁
 
-    while (1) { //
-        //if(int result=network.Select(cnnfd)){
-            //qDebug()<<"zheshijieguo  cnnfd:"<<result;
-
-
-    id = j1.at("myid");
-    std::cout << "json object id:" << id << "文件描述符" << cnnfd << std::endl;
-    userproxy.updateMUsers(id, cnnfd);
     sleep(3);
     while (1) {
         //if(int result=network.Select(cnnfd)){
@@ -54,8 +46,6 @@ void Task::run()
         }
         else{
             auto j = nlohmann::json::parse(buf);
-
-            id = j.at("myid");
             qDebug() << "cnnfd " << cnnfd;
             std::string request_type = j.at("request_type");
             std::cout << "json object id:" << id << std::endl;
