@@ -5,7 +5,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <sys/ioctl.h>
-
+#include <fstream>
 //#include <sys/ioctl.h>
 
 #define BUF_SIZE  1024
@@ -63,7 +63,7 @@ int Network::recieveMessage(int cnnfd,char* buf)
         int offset{0};
         memset(buf,'\0',BUF_SIZE);
         while ((size-n)>0) {
-            n = read(cnnfd, buf + offset, size);
+            n=read(cnnfd,buf+offset,size);
             offset=offset+n;
             if(n<0){
                 qDebug()<<"faild to read message from connect socket!";
@@ -99,6 +99,78 @@ void Network::sendMessage(int cnnfd,char* buf)
     }
 }
 
+void Network::sendImage(int cnnfd, std::string path)
+{
+    std::ifstream file(path,std::ios::binary|std::ios::ate);
+    if(!file)
+        qDebug()<<"file open erro!";
+
+    std::streamsize size=file.tellg();
+    qDebug()<<"file size:"<<size;
+    qDebug()<<"sizeof(size):"<<sizeof(size);
+
+    write(cnnfd,&size,sizeof(size));
+    file.seekg(0,std::ios::beg);
+
+    char buf[10240];
+
+    while (size>0) {
+        std::streamsize file_read=file.read(buf,sizeof(buf)).gcount();
+        qDebug()<<"file_read:"<<file_read;
+        write(cnnfd,buf,file_read);
+        size=size-file_read;
+    }
+}
+
+void Network::sendImage(int cnnfd, char* buf,long buf_len)
+{
+    // std::ifstream file(path,std::ios::binary|std::ios::ate);
+    // if(!file)
+    //     qDebug()<<"file open erro!";
+
+    // std::streamsize size=file.tellg();
+    long size;
+    size=buf_len;
+
+    qDebug()<<"file size:"<<size;
+    qDebug()<<"sizeof(size):"<<sizeof(size);
+
+    write(cnnfd,&size,sizeof(long));
+    // file.seekg(0,std::ios::beg);
+
+    // char buf[10240];
+
+    while (size>0) {
+        // std::streamsize file_read=file.read(buf,sizeof(buf)).gcount();
+        int n_write=write(cnnfd,buf,size);
+        qDebug()<<"write_buf:"<<n_write;
+        size=size-n_write;
+    }
+}
+
+
+long Network::recImage(int cnnfd,char *filebuf){
+    // char filebuf[202400]="";
+    int n_read;
+    long posx=0;
+    int size;
+    if((read(cnnfd,&size,8))<=0){    //读取消息长度
+        qDebug()<<"read image length erro";
+    }
+    while(size>0){
+        n_read=read(cnnfd,filebuf+posx,102400);       //
+
+        qDebug()<<"n_read:"<<n_read;
+        if(n_read==0){
+            qDebug()<<"recimg erro,maybe socket was closed!";
+            break;
+        }
+        size=size-n_read;
+        posx=posx+n_read;
+    }
+    qDebug()<<"rec image filebuf length:"<<strlen(filebuf);
+    return posx;
+}
 int Network::Select(int cnnfd)
 {
     fd_set fdreads;
