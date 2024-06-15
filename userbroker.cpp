@@ -6,6 +6,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
+#include <string>
 #include <time.h>
 
 using namespace rapidjson;
@@ -28,6 +29,25 @@ json UserBroker::findUser(USER_ID user_id)
     return storeQueryResultToJson_Users(user, "user_info");
 }
 
+//--------------
+json UserBroker::findUserInfo(unsigned int user_id)
+{
+    std::string command;
+    command = "select * from Users where UserID = " + std::to_string(user_id) + ";";
+    mysqlpp::StoreQueryResult res = RelationalBroker::query(command);
+    json obj;
+    for (size_t i = 0; i < res.num_rows(); ++i) {
+        mysqlpp::Row row = res[i];
+        obj["UserID"] = row["UserID"];
+        obj["U_Nickname"] = row["U_Nickname"];
+        obj["U_Avater"] = row["U_Avater"];
+        obj["U_Gender"] = row["U_Gender"];
+        obj["U_Area"] = row["U_Area"];
+        obj["U_Signature"] = row["U_Signature"];
+    }
+    return obj;
+}
+//--------------
 bool UserBroker::isFriend(USER_ID user_id, USER_ID friend_id)
 {
     std::string command;
@@ -76,7 +96,57 @@ std::string UserBroker::findValueOfField(const mysqlpp::StoreQueryResult &user,
 
     return fieldValue;
 }
+//-----------------------avatar
+std::vector<std::string> UserBroker::findFriendList(int userId)
+{
+    // std::cout << "UserBroker::findFriendList" << std::endl;
+    // std::cout << "要查询的用户id是" << userId << std::endl;
+    std::string command;
+    command = "select *from Relation where User1ID =" + std::to_string(userId)
+              + " OR User2ID = " + std::to_string(userId) + ";";
+    // command = "select * from Relation where User1ID=100000 OR User2ID=100000;";
+    mysqlpp::StoreQueryResult res = RelationalBroker::query(command);
+    std::vector<std::string> friendIdList;
+    for (size_t i = 0; i < res.num_rows(); ++i) {
+        mysqlpp::Row row = res[i];
+        // 获取每个字段的值
+        unsigned int _receiverid = row["User1ID"];
+        unsigned int _senderid = row["User2ID"];
+        if (userId == _receiverid) {
+            friendIdList.push_back(std::to_string(_senderid));
+            std::cout << _senderid;
+        } else if (userId == _senderid) {
+            friendIdList.push_back(std::to_string(_receiverid));
+            std::cout << _receiverid;
+        }
+    }
+    friendIdList.push_back(std::to_string(userId));
+    return friendIdList;
+}
 
+std::map<std::string, std::string> UserBroker::findFriendListAvatar(
+    std::vector<std::string> friendlist)
+{
+    // std::cout << "UserBroker::findFriendListAvatar" << std::endl;
+    std::map<std::string, std::string> firendlistAvatar;
+    std::string command;
+    foreach (std::string friendId, friendlist) {
+        command = "select UserID,U_Avater from Users where UserID =" + friendId + ";";
+        mysqlpp::StoreQueryResult res = RelationalBroker::query(command);
+        std::vector<std::string> friendIdList;
+        for (size_t i = 0; i < res.num_rows(); ++i) {
+            mysqlpp::Row row = res[i];
+            // 获取每个字段的值
+            unsigned int _userId = row["UserID"];
+            char _uAvatar[100];
+            strcpy(_uAvatar, row["U_Avater"]);
+            // std::cout << _userId << " " << _uAvatar;
+            firendlistAvatar.insert(std::make_pair(std::to_string(_userId), std::string(_uAvatar)));
+        }
+    }
+    return firendlistAvatar;
+}
+//------------------------------
 json UserBroker::storeQueryResultToJson_Users(const mysqlpp::StoreQueryResult &user,
                                               const std::string msgType)
 {
@@ -179,10 +249,6 @@ bool UserBroker::deleteFriendRelation(USER_ID user_id, USER_ID friend_id)
     return true;
 }
 
-bool UserBroker::logOffUser() {
-	
-}
+bool UserBroker::logOffUser() {}
 
-bool UserBroker::modifyUserInfo() {
-	
-}
+bool UserBroker::modifyUserInfo() {}

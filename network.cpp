@@ -101,7 +101,7 @@ void Network::sendMessage(int cnnfd,char* buf)
 
 void Network::sendImage(int cnnfd, std::string path)
 {
-    std::ifstream file(path,std::ios::binary|std::ios::ate);
+    std::ifstream file("/root/WeChat-Imitate-Client/" + path, std::ios::binary | std::ios::ate);
     if(!file)
         qDebug()<<"file open erro!";
 

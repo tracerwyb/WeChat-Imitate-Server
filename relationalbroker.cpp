@@ -38,9 +38,16 @@ void RelationalBroker::initDataBase()
 
         this->query("INSERT INTO Users "
                     "(UserID, U_Nickname, U_Avater, U_Gender, U_Area, U_Signature)VALUES"
-                    "(20209834, '85', 'path', '女', '重庆', '罪恶没有假期，正义便无暇休憩'),"
-                    " (20419934, '坐看云起时', 'path', '女', '重庆', '以雷霆击碎黑暗'),  "
-                    "(20726334, 'hahaha', 'path', '女', '重庆', '我叫hahaha');");
+                    "(20209834, '85', 'assets/Picture/avatar/20209834avatar.jpg', '女', '重庆', "
+                    "'罪恶没有假期，正义便无暇休憩'),"
+                    " (20419934, '坐看云起时', 'assets/Picture/avatar/20419934avatar.jpg', '女', "
+                    "'重庆', '以雷霆击碎黑暗'), "
+                    "(20726334, 'hahaha', 'assets/Picture/avatar/20726334avatar.jpg', '女', "
+                    "'重庆', '我叫hahaha'),"
+                    " (100000, 'hrxtest1', 'assets/Picture/avatar/100000avatar.jpg', '女', "
+                    "'重庆', '我是xixixi'), "
+                    " (100001, 'hrxtest2', 'assets/Picture/avatar/100001avatar.jpg', '女', "
+                    "'重庆', '我是lalala');");
 
         this->query("INSERT INTO FriendRequest (RequestID, RequestSenderID, RequestReceiverID, "
                     "RequestTime, state)VALUES "
@@ -48,17 +55,21 @@ void RelationalBroker::initDataBase()
                     "(2, 20419934, 20419934, '2024-04-26 17:20:00', 0),"
                     "(3, 20726334, 20419934, '2024-04-26 17:20:00', 1);");
 
-        this->query("INSERT INTO Relation (RelationID, User1ID, User2ID, BuildTime)VALUES (1, "
-                    "20209834, 20419934, '2024-04-26 17:20:00'), (2, 20419934, 20419934, "
-                    "'2024-04-26 17:20:00'), (3, 20726334, 20419934, '2024-04-26 17:20:00');");
+        this->query("INSERT INTO Relation (RelationID, User1ID, User2ID, BuildTime)VALUES "
+                    "(1, 20209834, 20419934,'2024-04-26 17:20:00'), "
+                    "(2, 20419934, 20419934,'2024-04-26 17:20:00'), "
+                    "(3, 20726334, 20419934,'2024-04-26 17:20:00'),"
+                    "(4, 100000, 100001, '2024-04-26 17:20:00');");
 
-        this->query(
-            "INSERT INTO Message (MessageID, SendTime, SenderId,ReceiverId, "
-            "MessageContent,MessageType)VALUES(1, '2024-04-26 17:20:00', "
-            "'20419934', '20419934','hello, this is kangkang','Text'),(2, '2024-04-26 17:23:00', "
-            "'20726334','20419934', "
-            "'hello world','Text'),"
-            "(3, '2024-04-26 17:24:00', '20209834','20419934', 'hello qt','Text');");
+        this->query("INSERT INTO Message (MessageID, SendTime, SenderId,ReceiverId, "
+                    "MessageContent,MessageType)VALUES(1, '2024-04-26 17:20:00', "
+                    "'20419934', '20419934','hello, this is kangkang','Text'),(2, "
+                    "'2024-04-26 17:23:00', "
+                    "'20726334','20419934', "
+                    "'hello world','Text'),"
+                    "(3, '2024-04-26 17:24:00', '20209834','20419934', 'hello "
+                    "qt','Text'),(4, '2024-04-26 "
+                    "17:24:00','100000','100001', 'hello qt','Text');");
 
     } catch (mysqlpp::Exception e) {
         std::cout << e.what();

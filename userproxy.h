@@ -3,7 +3,8 @@
 
 #include "user.h"
 #include "userinterface.h"
-
+#include <string>
+#include <vector>
 class UserProxy : public User
 {
 public:
@@ -16,6 +17,9 @@ public:
     json toJson(User *user);
     void initFriendList();
     bool isFriend(USER_ID user_id, USER_ID friend_id);
+    //查找到用户的朋友
+    nlohmann::json findFriendListAvatar(int userId);
+    nlohmann::json findUserFriendsInfo(int userId);
 };
 
 #endif

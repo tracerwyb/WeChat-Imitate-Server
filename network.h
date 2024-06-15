@@ -12,7 +12,9 @@ public:
     int recieveMessage(int cnnfd,char* buf);
     void sendMessage(int cnnfd,char*);
 
+    //离线
     void sendImage(int cnnfd,std::string path);
+    //在线
     void sendImage(int cnnfd,char *buf,long buf_len);
 
     long recImage(int cnnfd,char *filebuf);

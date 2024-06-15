@@ -1,6 +1,5 @@
 #include "initcontroller.h"
 #include "relationalbroker.h"
-#include "server.h"
 #include "userproxy.h"
 
 #include <QDebug>

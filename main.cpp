@@ -1,13 +1,14 @@
 #include "server.h"
 //#include <opencv4/opencv2/imgcodecs.hpp>
 //#include <opencv4/opencv2/opencv.hpp>
-
+#include "initcontroller.h"
 int main()
 {
     // r.query("select * from Message_UserID;");
     // r.query("select * from FriendRequest;");
     // r.query("select * from Relation;");
     // r.query("select * from Users;");
+    InitController::getInstance()->initDatabase();
     Server server;
     server.start();
     

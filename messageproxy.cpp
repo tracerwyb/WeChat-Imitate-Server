@@ -23,7 +23,6 @@ void MessageProxy::storeMessage(unsigned int receiverid,
 //一次性读取;一次性发送/多次发送for循环
 std::vector<nlohmann::json> MessageProxy::pushMessage(unsigned int receiverid)
 {
-    std::cout << " in proxy";
     auto broker = MessageBroker::getInstance();
     m_msg_sequence = broker->getMessage(receiverid);
     int size = m_msg_sequence.size();

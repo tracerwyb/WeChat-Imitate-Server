@@ -77,16 +77,42 @@ void Task::run()
                 }
             }
 //-----------
-            if(request_type=="initPersonalPage"){
+            if (request_type == "initPersonalPage") {
                 nlohmann::json j;
-                j["request_type"]="initPersonalPage";         //发送很多张图片，通过for循环，1张图片要发送两次，一次是图片信息，一次是图片的内容
-                j["imageName"]="avater";
-                std::string s=j.dump();
-                network.sendMessage(cnnfd,s.data());
-                std::string path="/run/media/root/study/avater1.jpg";
-                network.sendImage(cnnfd,path);
+                j["request_type"]
+                    = "initPersonalPage"; //发送很多张图片，通过for循环，1张图片要发送两次，一次是图片信息，一次是图片的内容
+                j["imageName"] = "avater";
+                std::string s = j.dump();
+                network.sendMessage(cnnfd, s.data());
+                std::string path = "/run/media/root/study/avater1.jpg";
+                network.sendImage(cnnfd, path);
+                //用户账号id和头像
             }
-//-----------
+            //-----------
+            if (request_type == "initUsersAvatar") {
+                nlohmann::json json_array = nlohmann::json::array();
+                std::string userid = j["UserId"];
+                json_array = PushController::getInstance()->pushUserAvatar(std::stoi(userid));
+                //发回用户账号id和头像
+                for (auto &obj : json_array) {
+                    std::string s = obj.dump();
+                    std::cout << "发送头像图片: " << s << std::endl;
+                    network.sendMessage(cnnfd, s.data());
+                    network.sendImage(cnnfd, obj.at("UserAvatar"));
+                }
+            }
+            if (request_type == "initFriendInfo") {
+                nlohmann::json json_array = nlohmann::json::array();
+                std::string userid = j["UserId"];
+                json_array = PushController::getInstance()->pushUserFriendsInfo(std::stoi(userid));
+                //发回用户账号id和头像
+                for (auto &obj : json_array) {
+                    std::string s = obj.dump();
+                    std::cout << "发送好友信息" << s << std::endl;
+                    network.sendMessage(cnnfd, s.data());
+                }
+            }
+            //-----------------
             if (request_type == "isfriend") {
                 // qDebug() << buf;
                 int friendid = j.at("friendID");
@@ -131,19 +157,16 @@ void Task::run()
 
             if (request_type == "GetOfflineMessage") {
                 std::string userid = j["UserId"];
-                // id = j["UserId"];
-
-                std::cout << "reading to read offlinemessage from data" << std::endl;
                 std::vector<nlohmann::json> messages = m_mc->pushMessage(std::stoi(userid));
                 for (int i = 0; i < messages.size(); i++) {
                     if (messages[i]["MessageType"] == "Text") {
                         messages[i]["request_type"] = "GetOfflineMessage";
-                        std::cout << "发送离线消息到服务端" << std::endl;
-                        std::cout << messages[i] << std::endl;
+                        std::cout << "发送离线消息到服务端:" << messages[i] << std::endl;
                         network.sendMessage(cnnfd, (messages[i].dump()).data());
                     } else {
                         messages[i]["request_type"] = "GetOfflineMessage";
                         network.sendMessage(cnnfd, (messages[i].dump()).data());
+                        network.sendImage(cnnfd, messages[i]["MessageContent"]);
                         //读取路径读入程序发送
                         //获取文件转为char并发送
                     }
@@ -151,7 +174,9 @@ void Task::run()
             }
             if (request_type == "SendMessage") {
                 std::cout << "接收到客户端发动消息请求" << std::endl;
-                char mediaBuffer[99999] = "";
+                char filebuf[204800] = "";
+                long filebuf_len;
+
                 std::string temp;
                 temp = j["SenderId"];
                 std::cout << "SenderId:" << temp << std::endl;
@@ -175,7 +200,6 @@ void Task::run()
                     messageContent = j["MessageContent"].get<std::string>();
                 } else {
                     qDebug() << "SenderId is neither number nor string";
-                    std::cout << "处理客户端发送的信息:" << std::endl;
                     qDebug() << "SenderId is neither number nor string";
                 }
                 std::string sendTime;
@@ -185,19 +209,14 @@ void Task::run()
                     sendTime = j["SendTime"].get<std::string>();
                 } else {
                     qDebug() << "SenderId is neither number nor string";
-                    std::cout << "处理客户端发送的信息:" << std::endl;
                     qDebug() << "SenderId is neither number nor string";
                 }
+                //
 
                 std::cout << "处理客户端发送的信息:" << std::endl;
                 if (messageType == "Vedio" || messageType == "Audio" || messageType == "Picture") {
-                    int res = network.recieveMessage(cnnfd, mediaBuffer);
+                    filebuf_len = network.recImage(cnnfd, filebuf);
                     std::cout << "多媒体类:" << std::endl;
-                    if (res == -1) { //套接字关闭或中断,退出while循环，结束线程
-                        userproxy.updateMUsers(id, 0);
-                        close(cnnfd);
-                        break;
-                    }
                 }
                 int target_conn = userproxy.findUserConn(receiverid);
                 if (target_conn != 0) {
@@ -207,9 +226,9 @@ void Task::run()
                         network.sendMessage(target_conn, buf);
                     } else {
                         network.sendMessage(target_conn, buf);
-                        network.sendMessage(target_conn, mediaBuffer);
+                        network.sendImage(target_conn, filebuf, filebuf_len);
+                        //666
                     }
-                    //传二进制视频再调用一次network.receive
                 } else {
                     //存储数据库中
                     if (messageType == "Text") {
@@ -221,10 +240,9 @@ void Task::run()
                                                messageType);
                     } else {
                         // 使用数组和长度创建vector
-                        std::vector<unsigned char> vec(mediaBuffer,
-                                                       mediaBuffer
-                                                           + sizeof(mediaBuffer)
-                                                                 / sizeof(mediaBuffer[0]));
+                        std::vector<unsigned char> vec(filebuf,
+                                                       filebuf
+                                                           + sizeof(filebuf) / sizeof(filebuf[0]));
                         m_mc->storeMessageInfo(receiverid, senderid, vec, sendTime, messageType);
                     }
                 }

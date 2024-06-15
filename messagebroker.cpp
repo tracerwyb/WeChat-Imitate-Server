@@ -38,42 +38,26 @@ bool MessageBroker::deleteMessage(unsigned int receiverid)
 }
 
 //RelationalBroker::query(std::string command)
-
 std::vector<Message> MessageBroker::getMessage(unsigned int receiverid)
 {
-    std::cout << "in messagebroker for get messages" << std::endl;
-    this->command = "SELECT * from Message WHERE ReceiverId=" + std::to_string(receiverid) + ";";
+    std::cout << receiverid << std::endl;
+    std::string command = "SELECT * FROM Message WHERE ReceiverId=" + std::to_string(receiverid)
+                          + ";";
     mysqlpp::StoreQueryResult res = RelationalBroker::query(command);
-
-    std::cout << "in messagebroker success get messages" << std::endl;
-    //处理数据
+    // std::cout << "in messagebroker success get messages" << std::endl;
     std::vector<Message> msgs;
     for (size_t i = 0; i < res.num_rows(); ++i) {
         mysqlpp::Row row = res[i];
-        // 获取每个字段的值
         unsigned int _receiverid = row["ReceiverId"];
         unsigned int _senderid = row["SenderId"];
-        // std::cout << "datatime1";
-        // std::string _dateTime = row["SendTime"];
-        // std::cout << "datatime2";
-        char _datatime[50];
-        char _type[10];
-        char _content[250];
-        strcpy(_datatime, row["SendTime"]);
-        strcpy(_type, row["MessageType"]);
-        strcpy(_content, row["MessageContent"]);
+        std::string _datatime = row["SendTime"].c_str();
+        std::string _type = row["MessageType"].c_str();
+        std::string _content = row["MessageContent"].c_str();
 
-        // time(&_dateTime);
-        // char time_buffer[20]; // 足够存储日期和时间的字符数组_dateTime
-        // std::strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%d %H:%M:%S", localtime(&_dateTime));
-        //路径要根据最终的环境更改
-        Message msg(_receiverid,
-                    _senderid,
-                    std::string(_content),
-                    std::string(_datatime),
-                    std::string(_type));
+        Message msg(_receiverid, _senderid, _content, _datatime, _type);
+        std::cout << _receiverid << " " << _senderid << " " << _datatime << std::endl;
         msgs.push_back(msg);
-        // 输出字段值
     }
+
     return msgs;
 }

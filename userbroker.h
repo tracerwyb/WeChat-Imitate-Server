@@ -16,6 +16,9 @@ public:
 	static UserBroker* m_userBroker;
 	static UserBroker* getInstance();
     json findUser(USER_ID user_id);
+    //-------------
+    json findUserInfo(unsigned int user_id);
+    //-------------
     bool isFriend(USER_ID user_id, USER_ID friend_id);
     bool isUserIDExists(USER_ID user_id);
     bool storeFriendRequest(USER_ID request_sender_id, USER_ID request_recver_id);
@@ -29,6 +32,10 @@ public:
     std::string findValueOfField(const mysqlpp::StoreQueryResult &user,
                                  const std::string fieldname,
                                  int rowindex);
+
+    std::vector<std::string> findFriendList(int userId);
+    //  std::map<std::string friendId, std::string friendIdPath>
+    std::map<std::string, std::string> findFriendListAvatar(std::vector<std::string> friendlist);
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include "pushcontroller.h"
 #include "network.h"
 #include "user.h"
+#include "userproxy.h"
 #include <fstream>
 #include <iostream>
 
@@ -37,7 +38,20 @@ void PushController::pushAddFriendRequest(int user_id, int friend_id)
         network.sendMessage(friendConn, buf.data());
     }
 }
+//推送-----------------
+nlohmann::json PushController::pushUserAvatar(int userId)
+{
+    // std::cout << "PushController::pushUserAvatar" << std::endl;
+    UserProxy u;
+    return u.findFriendListAvatar(userId);
+}
 
+nlohmann::json PushController::pushUserFriendsInfo(int userId)
+{
+    UserProxy u;
+    return u.findUserFriendsInfo(userId);
+}
+//--------------------
 std::vector<unsigned char> PushController::pushMessage(nlohmann::json msg_json)
 {
     std::string type = msg_json["MessageType"];

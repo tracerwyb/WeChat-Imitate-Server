@@ -34,25 +34,25 @@ nlohmann::json Message::getAbstract()
 
 string Message::handleByteStreamContent(std::vector<unsigned char> byte_Stream, std::string type)
 {
-    // time_t datetime;
-    // time(&datetime);
+    time_t datetime;
+    time(&datetime);
 
-    // // 将时间转换为字符串
-    // char time_Buffer[20]; // 足够存储日期和时间的字符数组
-    // std::strftime(time_Buffer, sizeof(time_Buffer), "%Y%m%d%H%M%S", std::localtime(&datetime));
-    // //路径要根据最终的环境更改
+    // 将时间转换为字符串
+    char time_Buffer[20]; // 足够存储日期和时间的字符数组
+    std::strftime(time_Buffer, sizeof(time_Buffer), "%Y%m%d%H%M%S", std::localtime(&datetime));
+    //路径要根据最终的环境更改
     std::filesystem::path current_path = std::filesystem::current_path();
     string filepath = " ";
     if (type == "Picture") {
         filepath = current_path.string() + "/UsersData/Picture/Picture_" + to_string(this->senderid)
-                   + this->dateTime + "/.bin";
+                   + time_Buffer + ".bin";
 
     } else if (type == "Vedio") {
         filepath = current_path.string() + "/UsersData/Picture/Vedio_" + to_string(this->senderid)
-                   + this->dateTime + "/.bin";
+                   + time_Buffer + ".bin";
     } else if (type == "Audio") {
         filepath = current_path.string() + "/UsersData/Picture/Audio_" + to_string(this->senderid)
-                   + this->dateTime + "/.bin";
+                   + time_Buffer + ".bin";
         // 打开新文件
     }
 

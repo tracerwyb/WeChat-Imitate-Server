@@ -35,7 +35,6 @@ void MessageController::storeMessageInfo(unsigned int receiverid,
 
 std::vector<nlohmann::json> MessageController::pushMessage(unsigned int receiverid)
 {
-    std::cout << "in controller";
     MessageProxy m_proxy;
     return (m_proxy.pushMessage(receiverid));
     //消息包含receiverid, senderid, content, dateTime
