@@ -148,29 +148,32 @@ void Network::sendImage(int cnnfd, char* buf,long buf_len)
     }
 }
 
-
-long Network::recImage(int cnnfd,char *filebuf){
+long Network::recImage(int cnnfd, char *filebuf)
+{
     // char filebuf[202400]="";
     int n_read;
-    long posx=0;
+    long posx = 0;
     int size;
-    if((read(cnnfd,&size,8))<=0){    //读取消息长度
-        qDebug()<<"read image length erro";
+    if ((read(cnnfd, &size, 8)) <= 0) { //读取消息长度
+        qDebug() << "read image length erro";
     }
-    while(size>0){
-        n_read=read(cnnfd,filebuf+posx,102400);       //
+    qDebug() << "!!!!!:" << size;
 
-        qDebug()<<"n_read:"<<n_read;
-        if(n_read==0){
-            qDebug()<<"recimg erro,maybe socket was closed!";
+    while (size > 0) {
+        n_read = read(cnnfd, filebuf + posx, 102400); //
+
+        qDebug() << "n_read:" << n_read;
+        if (n_read == 0) {
+            qDebug() << "recimg erro,maybe socket was closed!";
             break;
         }
-        size=size-n_read;
-        posx=posx+n_read;
+        size = size - n_read;
+        posx = posx + n_read;
     }
-    qDebug()<<"rec image filebuf length:"<<strlen(filebuf);
+    qDebug() << "rec image filebuf length:" << strlen(filebuf);
     return posx;
 }
+
 int Network::Select(int cnnfd)
 {
     fd_set fdreads;

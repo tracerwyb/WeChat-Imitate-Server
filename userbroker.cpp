@@ -112,12 +112,14 @@ std::vector<std::string> UserBroker::findFriendList(int userId)
         // 获取每个字段的值
         unsigned int _receiverid = row["User1ID"];
         unsigned int _senderid = row["User2ID"];
-        if (userId == _receiverid) {
-            friendIdList.push_back(std::to_string(_senderid));
-            std::cout << _senderid;
-        } else if (userId == _senderid) {
-            friendIdList.push_back(std::to_string(_receiverid));
-            std::cout << _receiverid;
+        if (_receiverid != _senderid) {
+            if (userId == _receiverid) {
+                friendIdList.push_back(std::to_string(_senderid));
+                std::cout << _senderid;
+            } else if (userId == _senderid) {
+                friendIdList.push_back(std::to_string(_receiverid));
+                std::cout << _receiverid;
+            }
         }
     }
     friendIdList.push_back(std::to_string(userId));

@@ -51,7 +51,8 @@ bool User::initializeMUsers()
 
 void User::updateMUsers(USER_ID user_id, USER_CONN user_conn)
 {
-    m_users.insert(std::make_pair(user_id, user_conn));
+    // m_users.insert(std::make_pair(user_id, user_conn));
+    m_users[user_id] = user_conn; // 插入新值
     qDebug() << m_users;
     qDebug() << m_users[user_id];
     // m_users[user_id] = user_conn;

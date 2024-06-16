@@ -45,7 +45,7 @@ string Message::handleByteStreamContent(std::vector<unsigned char> byte_Stream, 
     string filepath = " ";
     if (type == "Picture") {
         filepath = current_path.string() + "/UsersData/Picture/Picture_" + to_string(this->senderid)
-                   + time_Buffer + ".bin";
+                   + time_Buffer + ".jpg";
 
     } else if (type == "Vedio") {
         filepath = current_path.string() + "/UsersData/Picture/Vedio_" + to_string(this->senderid)

@@ -69,7 +69,9 @@ void RelationalBroker::initDataBase()
                     "'hello world','Text'),"
                     "(3, '2024-04-26 17:24:00', '20209834','20419934', 'hello "
                     "qt','Text'),(4, '2024-04-26 "
-                    "17:24:00','100000','100001', 'hello qt','Text');");
+                    "17:24:00','100000','100001', 'hello qt','Text'),(5,'2024-04-26 "
+                    "17:24:00','20419934','20209834','hahaha','Text'),(6,'2024-04-26 "
+                    "17:20:00','20419934','20726334','xixixi','Text');");
 
     } catch (mysqlpp::Exception e) {
         std::cout << e.what();

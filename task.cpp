@@ -76,7 +76,7 @@ void Task::run()
                     network.sendImage(cnnfd2,filebuf,filebuf_len);
                 }
             }
-//-----------
+            //-----------
             if (request_type == "initPersonalPage") {
                 nlohmann::json j;
                 j["request_type"]
@@ -174,7 +174,7 @@ void Task::run()
             }
             if (request_type == "SendMessage") {
                 std::cout << "接收到客户端发动消息请求" << std::endl;
-                char filebuf[204800] = "";
+                char filebuf[504800] = "";
                 long filebuf_len;
 
                 std::string temp;
@@ -185,39 +185,42 @@ void Task::run()
                 std::cout << "ReceiverId:" << temp << std::endl;
                 int receiverid = std::stoi(temp);
                 //类型转换有问题
+
+                // std::string messageType = j.at("MessageType");
+                // std::string messageContent = j.at("MessageContent");
+                // std::string sendTime = j.at("SendTime");
+
                 std::string messageType;
                 if (j["MessageType"].is_number()) {
                     messageType = std::to_string(j["MessageType"].get<int>());
                 } else if (j["MessageType"].is_string()) {
                     messageType = j["MessageType"].get<std::string>();
                 } else {
-                    qDebug() << "SenderId is neither number nor string";
+                    std::cout << "can not receiver anything";
                 }
                 std::string messageContent;
                 if (j["MessageContent"].is_number()) {
-                    messageContent = std::to_string(j["MessageContent"].get<int>());
+                    messageType = std::to_string(j["MessageContent"].get<int>());
                 } else if (j["MessageContent"].is_string()) {
-                    messageContent = j["MessageContent"].get<std::string>();
+                    messageType = j["MessageContent"].get<std::string>();
                 } else {
-                    qDebug() << "SenderId is neither number nor string";
-                    qDebug() << "SenderId is neither number nor string";
+                    std::cout << "can not receiver anything";
                 }
                 std::string sendTime;
                 if (j["SendTime"].is_number()) {
-                    sendTime = std::to_string(j["SendTime"].get<int>());
+                    messageType = std::to_string(j["SendTime"].get<int>());
                 } else if (j["SendTime"].is_string()) {
-                    sendTime = j["SendTime"].get<std::string>();
+                    messageType = j["SendTime"].get<std::string>();
                 } else {
-                    qDebug() << "SenderId is neither number nor string";
-                    qDebug() << "SenderId is neither number nor string";
+                    std::cout << "can not receiver anything";
                 }
-                //
 
                 std::cout << "处理客户端发送的信息:" << std::endl;
                 if (messageType == "Vedio" || messageType == "Audio" || messageType == "Picture") {
-                    filebuf_len = network.recImage(cnnfd, filebuf);
                     std::cout << "多媒体类:" << std::endl;
+                    filebuf_len = network.recImage(cnnfd, filebuf);
                 }
+
                 int target_conn = userproxy.findUserConn(receiverid);
                 if (target_conn != 0) {
                     std::cout << "用户在线直接发送:" << std::endl;
