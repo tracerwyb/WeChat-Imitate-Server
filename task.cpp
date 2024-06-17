@@ -186,34 +186,9 @@ void Task::run()
                 int receiverid = std::stoi(temp);
                 //类型转换有问题
 
-                // std::string messageType = j.at("MessageType");
-                // std::string messageContent = j.at("MessageContent");
-                // std::string sendTime = j.at("SendTime");
-
-                std::string messageType;
-                if (j["MessageType"].is_number()) {
-                    messageType = std::to_string(j["MessageType"].get<int>());
-                } else if (j["MessageType"].is_string()) {
-                    messageType = j["MessageType"].get<std::string>();
-                } else {
-                    std::cout << "can not receiver anything";
-                }
-                std::string messageContent;
-                if (j["MessageContent"].is_number()) {
-                    messageType = std::to_string(j["MessageContent"].get<int>());
-                } else if (j["MessageContent"].is_string()) {
-                    messageType = j["MessageContent"].get<std::string>();
-                } else {
-                    std::cout << "can not receiver anything";
-                }
-                std::string sendTime;
-                if (j["SendTime"].is_number()) {
-                    messageType = std::to_string(j["SendTime"].get<int>());
-                } else if (j["SendTime"].is_string()) {
-                    messageType = j["SendTime"].get<std::string>();
-                } else {
-                    std::cout << "can not receiver anything";
-                }
+                std::string messageType = j.at("MessageType");
+                std::string messageContent = j.at("MessageContent");
+                std::string sendTime = j.at("SendTime");
 
                 std::cout << "处理客户端发送的信息:" << std::endl;
                 if (messageType == "Vedio" || messageType == "Audio" || messageType == "Picture") {
